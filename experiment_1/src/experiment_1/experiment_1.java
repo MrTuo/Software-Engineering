@@ -2,6 +2,7 @@ package experiment_1;
 
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 public class experiment_1 {
 	
@@ -180,5 +181,51 @@ public class experiment_1 {
 		System.out.println(end);
 		return end;
 	}
+	public static ArrayList<String> getItems(String expression)
+	/**
+	 * 对输入的expression，按加号拆分为多个多想式，保存并返回
+	 */
+	{
+		
+		return null;
+	}
+	public static boolean isInteger(String fact)
+	/**
+	 * 
+	 * @param fact为多项式中的因子
+	 * @return 是数字返回1，否则返回0。
+	 */
+	{
+		Pattern pattern = Pattern.compile("[0-9]*");  
+	    return pattern.matcher(fact).matches(); 
+	}
+	public static String makeSimple(String expression,ArrayList<String> items)
+	/**
+	 * 对输入的expression进行简化，输出简化结果
+	 * 简化包括
+	 */
+	{
+		String[] factors = null;
+		int[] newXishu  = new int[items.size()]; 
+		for (int i = 0; i < newXishu.length; i++)
+		{
+			newXishu[i]=1;
+		}
+		for (int i=0;i<items.size();i++)//对没个多项式内部的数字相乘化简
+		{
+			factors = items.get(i).split("//*");//用*分离出多项式的每个因子
+			for (int j = 0; j < factors.length; j++)//计算系数
+			{
+				if (isInteger(factors[j]))//如果是数字
+				{
+					newXishu[i] *= Integer.parseInt(factors[j]);
+				}
+			}
+			
+		}
+		return null;
+	}
 	
 }
+
+
