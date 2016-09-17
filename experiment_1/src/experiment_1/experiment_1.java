@@ -17,6 +17,7 @@ public class experiment_1 {
 		int choice=0;
 		ArrayList<String>  number = new ArrayList<String> ();//记录赋值函数的值
 		ArrayList<String>  letter = new ArrayList<String> ();//赋值函数的类型
+		ArrayList<String>  fuhao = new ArrayList<String> ();
 		char VarDerivative = 0;//保证求导变量的类型
 		int j=0;
 		int x=0;
@@ -86,11 +87,17 @@ public class experiment_1 {
 						}
 					}*/
 					xiang=splitby_jia(end_expression);
-					/*for (int i=0;i<xiang.length;i++){
-						System.out.println(xiang[i]);
-					}*/
+					//System.out.println(1);
+					for (int i=0;i<end_expression.length();i++){
+						if(end_expression.charAt(i)=='+'){
+							fuhao.add("+");
+						}
+						else if(end_expression.charAt(i)=='-'){
+							fuhao.add("-");
+						}
+					}
 					
-					derivative(xiang,VarDerivative,end_expression);
+					derivative(xiang,VarDerivative,end_expression,fuhao);
 				}
 				break;
 			default:
@@ -157,13 +164,15 @@ public class experiment_1 {
 		//return end;
 	}
 	@SuppressWarnings("null")
-	public static String derivative(String[] itemCount,char var,String expression){//求导初始化
+	public static String derivative(String[] itemCount,char var,String expression,ArrayList<String> fuhao){//求导初始化
 		int varNum[];//变量的个数
 		int xishu[];//项的系数
 		ArrayList<String>  newitemCount = new ArrayList<String> ();
+		ArrayList<String>  newfuhao = new ArrayList<String> ();
 		String end="";
+		int o=0;
 		varNum = new int [itemCount.length];
-		xishu = new int [itemCount.length];
+		//xishu = new int [itemCount.length];
 		if(expression.indexOf(var)==-1){
 			System.out.println("Error, no variable");
 			return null;
@@ -175,17 +184,17 @@ public class experiment_1 {
 						varNum[i]++;
 					}
 				}
-				for (int j=0;j<itemCount[i].length();j++){//计算系数
+				/*for (int j=0;j<itemCount[i].length();j++){//计算系数
 					if(itemCount[i].charAt(j)>='0'&&itemCount[i].charAt(j)<='9'){
 						xishu[i]=xishu[i]*10+(itemCount[i].charAt(j)-48);
 					}
 					else{
 						xishu[i]=1;
 					}
-				}
+				}*/
 				System.out.println("测试");
-				System.out.print(varNum[i]);//测试
-				System.out.println(xishu[i]);
+				System.out.print(varNum[i]+" ");//测试
+				//System.out.println(xishu[i]);
 				
 			}
 			/*for (int i=0;i<itemCount.length;i++){
@@ -196,8 +205,13 @@ public class experiment_1 {
 			
 			for (int i=0;i<itemCount.length;i++){//合成求导后的项
 				if(varNum[i]!=0){
+					if(i<itemCount.length-1){
+						System.out.println(fuhao);
+						System.out.println(fuhao.get(i));
+						newfuhao.add(fuhao.get(i));
+					}	
 					//System.out.println(Integer.toString(xishu[i])+"*"+itemCount[i].replaceFirst(String.valueOf(var), String.valueOf(varNum[i])));
-					newitemCount.add(Integer.toString(xishu[i])+"*"+itemCount[i].replaceFirst(String.valueOf(var), String.valueOf(varNum[i])));
+					newitemCount.add(itemCount[i].replaceFirst(String.valueOf(var), String.valueOf(varNum[i])));
 					//System.out.println(newitemCount);
 				}
 			}
@@ -206,7 +220,7 @@ public class experiment_1 {
 					end+=newitemCount.get(i);
 				}
 				else {
-					end+="+"+newitemCount.get(i);
+					end+=newfuhao.get(o++)+newitemCount.get(i);
 				}
 			}
 		}
@@ -214,9 +228,9 @@ public class experiment_1 {
 		return end;
 	}
 	public static String[] splitby_jia(String str){//按加法分割
-		return str.split("//+");
+		return str.split("\\+|\\-");
 	}
 	public static String[] splitby_cheng(String str){//按乘法分割
-		return str.split("//*");
+		return str.split("\\*");
 	}
 }
