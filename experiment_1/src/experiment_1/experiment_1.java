@@ -25,6 +25,7 @@ public class experiment_1 {
 		while(true){
 			choice=0;
 			expression=in.nextLine();
+			expression=change(expression);
 			judge=expression(expression, expression.length());
 			if (expression.length()>=9 && expression.substring(0, 9).equals("!simplify")){
 				choice=2;
@@ -232,5 +233,59 @@ public class experiment_1 {
 	}
 	public static String[] splitby_cheng(String str){//按乘法分割
 		return str.split("\\*");
+	}
+	public static String change(String expression){//将输入的表达式进行修改
+		String change_expression=null;
+		String end_expression="";
+		String[] str;
+		String[] xiang;
+		String newstr;
+		String newxiang;
+		int xishu=0;
+		change_expression=expression.replace("\t", "");//将tab删掉
+		change_expression=change_expression.replace(" ", "");//将空格删掉
+		str=change_expression.split("//+|//-");
+		for (int i=0;i<str.length;i++){
+			newstr=str[i];
+			for(int j=0;j<str[i].length();j++){
+				if(j<str[i].length()-1){
+					if(str[i].charAt(j)>='0'&&str[i].charAt(j)<='9'){
+						if((str[i].charAt(j+1)>='a'&&str[i].charAt(j+1)<='z')||(str[i].charAt(j+1)>='A'&&str[i].charAt(j+1)<='Z')){
+							newstr=newstr.substring(0,j+1)+"*"+newstr.substring(j+1);
+						}
+					}
+				}
+			}
+			str[i]=newstr;
+			end_expression+=str[i];
+			System.out.print(end_expression+" ");
+		}
+		str=end_expression.split("//+|//-");
+		for (int i=0;i<str.length;i++){
+			newstr=str[i];
+			xiang=str[i].split("//*");
+			for(int j=0;j<xiang.length;j++){
+				newxiang=xiang[j];
+				for(int k=0;k<xiang[i].length();k++){
+					if(xiang[j].charAt(k)=='^'){
+						for (int l=k+1;l<xiang[j].length();l++){
+							if(xiang[j].charAt(l)<'0'||xiang[j].charAt(l)>'9'){//出现错误，直接返回，在judge中会判断为错误表达式
+								return end_expression;
+							}
+							else{
+								xishu=xishu*10+(xiang[j].charAt(l)-48);
+							}
+						}
+					}
+					newxiang=xiang[j].substring(0, k);
+					for (int m=0;m<xishu;m++){
+						newxiang+="*"+xiang[j-1];
+					}
+					newxiang+=xiang[j].substring(k+1);
+					xiang[j]=newxiang;
+				}
+			}
+		}
+		return end_expression;
 	}
 }
