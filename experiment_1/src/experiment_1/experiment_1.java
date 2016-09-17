@@ -17,7 +17,6 @@ public class experiment_1 {
 		int choice=0;
 		ArrayList<String>  number = new ArrayList<String> ();//记录赋值函数的值
 		ArrayList<String>  letter = new ArrayList<String> ();//赋值函数的类型
-		ArrayList<String>  itemCount = new ArrayList<String> ();
 		char VarDerivative = 0;//保证求导变量的类型
 		int j=0;
 		int x=0;
@@ -50,7 +49,7 @@ public class experiment_1 {
 			case 2:
 				if (end_expression==null){
 					System.out.println("Error There is no expression!");//在没有表达式的情况下无法赋值
-				}
+				}	
 				else{
 					for (int i=expression.length()-1;i>=0;i--){
 						if(expression.charAt(i)=='='){
@@ -86,7 +85,7 @@ public class experiment_1 {
 							itemCount.add(end_expression.substring(j));
 						}
 					}*/
-					xiang=end_expression.split("\\+");
+					xiang=splitby_jia(end_expression);
 					/*for (int i=0;i<xiang.length;i++){
 						System.out.println(xiang[i]);
 					}*/
@@ -211,9 +210,13 @@ public class experiment_1 {
 				}
 			}
 		}
-		
 		System.out.println(end);
 		return end;
 	}
-	
+	public static String[] splitby_jia(String str){//按加法分割
+		return str.split("//+");
+	}
+	public static String[] splitby_cheng(String str){//按乘法分割
+		return str.split("//*");
+	}
 }
