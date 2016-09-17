@@ -15,9 +15,10 @@ public class experiment_1 {
 		String[] xiang=null;
 		boolean judge=false;
 		int choice=0;
-		ArrayList<String>  number = new ArrayList<String> ();
-		ArrayList<String>  letter = new ArrayList<String> ();
+		ArrayList<String>  number = new ArrayList<String> ();//记录赋值函数的值
+		ArrayList<String>  letter = new ArrayList<String> ();//赋值函数的类型
 		ArrayList<String>  itemCount = new ArrayList<String> ();
+		char VarDerivative = 0;//保证求导变量的类型
 		int j=0;
 		int x=0;
 		int y=0;
@@ -48,7 +49,7 @@ public class experiment_1 {
 				break;
 			case 2:
 				if (end_expression==null){
-					simplify(end_expression,letter,number);
+					System.out.println("Error There is no expression!");//在没有表达式的情况下无法赋值
 				}
 				else{
 					for (int i=expression.length()-1;i>=0;i--){
@@ -65,10 +66,28 @@ public class experiment_1 {
 				break;
 			case 3:
 				if(end_expression==null){
-					
+					System.out.println("Error There is no expression!");//在没有表达式的情况下无法求导
 				}
-				else{
-					
+				else{//有了表达式
+					//首先要将求导的变量求出来 变量只能是在 !d/d()括号里面的值 "()"是不能存在的 且变量只能有字母组成
+					VarDerivative=expression.charAt(4);
+					j=0;
+					/*System.out.println(VarDerivative);
+					for (int i=0;i<expression.length();i++){
+						//System.out.println("1");
+						if(expression.charAt(i)=='+'){
+							System.out.println("1");
+							System.out.println(end_expression.substring(j,i));
+							itemCount.add(end_expression.substring(j, i));
+							j=i+1;
+						}
+						else if(i==end_expression.length()-1){
+							System.out.println(end_expression.substring(j));
+							itemCount.add(end_expression.substring(j));
+						}
+					}*/
+					xiang=end_expression.split(end_expression, '+');
+					//derivative(itemCount,VarDerivative,end_expression);
 				}
 				break;
 			default:
@@ -78,7 +97,7 @@ public class experiment_1 {
 			 
 		}
 	}
-	public static boolean expression(String str,int len){//input the expression
+	public static boolean expression(String str,int len){//输入表达式
 		char a=0,b=0,c=0;//b is behind a,c is in front of a
 		int x=0;//judge the number is the first one or not
 		for (int i=0;i<len;i++){;
@@ -121,62 +140,70 @@ public class experiment_1 {
 		} 
 		return true;
 	}
-	public static String simplify(String expression,ArrayList<String> letter,ArrayList<String> number){//初始化赋值
+	public static void simplify(String expression,ArrayList<String> letter,ArrayList<String> number){//初始化赋值
 		String end=null;
 		end =expression;
-		if(expression.length()==0){
-			System.out.println("Error There is no expression!");
-		}
-		else{
-			for (int i=0;i<letter.size();i++){
+			/*for (int i=0;i<letter.size();i++){
 				System.out.println(letter.get(i)+' '+number.get(i));
-			}
-			
-		}
+			}*/
 		for (int i=0;i<letter.size();i++){
 			end=end.replace(letter.get(i), number.get(i));
-			System.out.println(end);
+			//System.out.println(end);
 		}
-		return end;
+		System.out.println(end);
+		//return end;
 	}
+	@SuppressWarnings("null")
 	public static String derivative(ArrayList<String>  itemCount,char var,String expression){//求导初始化
 		int varNum[];//变量的个数
 		int xishu[];//项的系数
-		ArrayList<String>  newitemCount = null;
+		ArrayList<String>  newitemCount = new ArrayList<String> ();
 		String end=null;
 		varNum = new int [itemCount.size()];
 		xishu = new int [itemCount.size()];
-		for (int i=0;i<itemCount.size();i++){
-			for (int j=0;j<itemCount.get(i).length();j++){//计算变量的个数
-				if(var==itemCount.get(i).charAt(j)){
-					varNum[i]++;
+		if(expression.indexOf(var)==-1){
+			System.out.println("Error, no variable");
+			return null;
+		}
+		else{
+			for (int i=0;i<itemCount.size();i++){
+				for (int j=0;j<itemCount.get(i).length();j++){//计算变量的个数
+					if(var==itemCount.get(i).charAt(j)){
+						varNum[i]++;
+					}
+				}
+				for (int j=0;j<itemCount.get(i).length();j++){//计算系数
+					if(itemCount.get(i).charAt(j)>='0'&&itemCount.get(i).charAt(j)<='9'){
+						xishu[i]=xishu[i]*10+(int)itemCount.get(i).charAt(j);
+					}
+					else{
+						break;
+					}
 				}
 			}
-			for (int j=0;j<itemCount.get(i).length();j++){//计算系数
-				if(itemCount.get(i).charAt(j)>='0'&&itemCount.get(i).charAt(j)<='9'){
-					xishu[i]=xishu[i]*10+(int)itemCount.get(i).charAt(j);
+			for (int i=0;i<itemCount.size();i++){
+				System.out.println(itemCount.get(i));//测试
+			}
+			
+			
+			for (int i=0;i<itemCount.size();i++){//合成求导后的项
+				if(varNum[i]==0){
+					continue;
 				}
 				else{
-					break;
+					newitemCount.add(Integer.toString(xishu[i])+'*'+itemCount.get(i).replaceFirst(String.valueOf(var), String.valueOf(varNum[i])));
+				}
+			}
+			for (int i=0;i<newitemCount.size();i++){//将合成的项连起来
+				if(i==0){
+					end.concat(newitemCount.get(i));
+				}
+				else {
+					end.concat("+"+newitemCount.get(i));
 				}
 			}
 		}
-		for (int i=0;i<itemCount.size();i++){
-			if(varNum[i]==0){
-				continue;
-			}
-			else{
-				newitemCount.add(Integer.toString(xishu[i])+'*'+itemCount.get(i).replaceFirst(String.valueOf(var), String.valueOf(varNum[i])));
-			}
-		}
-		for (int i=0;i<newitemCount.size();i++){
-			if(i==0){
-				end.concat(newitemCount.get(i));
-			}
-			else {
-				end.concat("+"+newitemCount.get(i));
-			}
-		}
+		
 		System.out.println(end);
 		return end;
 	}
