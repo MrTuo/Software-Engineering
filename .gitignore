@@ -1,2 +1,4 @@
 # IntelliJ中的文件
 .idea/*
+#JAVA编译生成的文件
+*.class
