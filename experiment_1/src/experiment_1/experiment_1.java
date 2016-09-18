@@ -1,11 +1,11 @@
 package experiment_1;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class experiment_1 {
-	
 	//letter numbser新表达式需要初始化
 	public static void  main (String[] args){
 		//variable
@@ -39,7 +39,7 @@ public class experiment_1 {
 			}
 			switch(choice)
 			{
-			case 1:
+			case 1://输入
 				if (judge){
 					System.out.println(expression);
 					end_expression=expression;
@@ -49,7 +49,7 @@ public class experiment_1 {
 					//System.out.println(end_expression);
 				}
 				break;
-			case 2:
+			case 2://赋值
 				if (end_expression==null){
 					System.out.println("Error There is no expression!");//在没有表达式的情况下无法赋值
 				}
@@ -66,7 +66,7 @@ public class experiment_1 {
 					simplify(end_expression,letter,number);
 				}
 				break;
-			case 3:
+			case 3://求导
 				if(end_expression==null){
 					System.out.println("Error There is no expression!");//在没有表达式的情况下无法求导
 				}
@@ -289,40 +289,107 @@ public class experiment_1 {
 		}
 		return end_expression;
 	}
-
-    public static ArrayList<String> getItems(String expression)
+	
     /**
      * 对输入的expression，按加号拆分为多个多想式，保存并返回
+     * 保存为ArrayList类型的优势在于在化简时，会有减少，便于处理。
      */
+    public static ArrayList<String> getItems(String expression)
     {
-
-        return null;
+    	String[] tmpItems = expression.split("\\+|\\-");
+    	ArrayList<String> items =  new ArrayList<String>();
+    	for (int i = 0; i < tmpItems.length; i++) {
+			items.add(tmpItems[i]);
+		}
+        return items;
     }
-    public static boolean isInteger(String fact)
+    
     /**
-     *
-     * @param fact为多项式中的因子
-     * @return 是数字返回1，否则返回0。
-     */
+    *
+    * @param fact为多项式中的因子
+    * @return 是数字返回1，否则返回0。
+    */
+    public static boolean isInteger(String fact)
     {
         Pattern pattern = Pattern.compile("[0-9]*");
         return pattern.matcher(fact).matches();
     }
-    public static String makeSimple(String expression,ArrayList<String> items)
+    
     /**
-     * 对输入的expression进行简化，输出简化结果
-     * 简化包括
+     * 
+     * @param expression:表达式
+     * @param items:多项式 
+     * @return 符号数组，仅含±1
      */
+    public static int[] getSign(String expression,ArrayList<String> items)
     {
-        String[] factors = null;
-        int[] newXishu  = new int[items.size()];
+    	int[] sign = new int[items.size()];
+    	int j=0;
+    	for(int i = 0;i<expression.length();i++)
+    	{
+    		if(expression.charAt(i) == '+')
+    		{
+    			sign[j++]=1;
+    		}
+    		else if (expression.charAt(i) == '-')
+    		{
+    			sign[j++]=-1;
+    		}
+    	}
+    	
+    	return sign;
+    }
+    
+    /**
+     * 判断是否为同类项
+     * @param string1 同类项1
+     * @param string2 同类项2
+     * @return 是否为同类项
+     * 算法思想：将两个多项式分别按*分开后，将变量保存在两个数组里，对数组进行字典排序后比较即可。相同为同类项，不同则非同类项。
+     */
+    public static boolean isSameItem(String string1, String string2)
+    {
+		String[] factor1,factor2;
+		factor1=string1.split("//*|(/d+)");//按*号或者数字拆分
+		factor2=string2.split("//*|(/d+)");
+		if(factor1.length != factor2.length){
+			return false;
+		}
+		Arrays.sort(factor1);
+		Arrays.sort(factor2);
+		for (int i = 0; i < factor2.length; i++) {
+			if(factor1[i]!=factor2[i]){
+				return false;
+			}
+		}
+    	return true;
+	}
+    
+    /**
+     * * 对输入的expression进行简化，输出简化结果
+     * items为已分开的多项式，signArr为符号数组。
+     * 简化包括每个 同类项系数相乘，同类项合并。
+     * @param expression
+     * @param items
+     * @param signArr
+     * @return 化简后的表达式
+     */
+    public static String makeSimple(String expression,ArrayList<String> items ,int[] signArr)
+    {
+        String[] factors = null;//保存多项式的因子
+        String newExpression = null;//保存最终化简结果
+        int[] newXishu  = new int[items.size()];//化简后的系数数组
+        ArrayList<String> newItems = items;//化简后的多项式
+        int tmpXishu = 0;//临时系数
+        String tmpItem = null;//临时多项式
+        
         for (int i = 0; i < newXishu.length; i++)
         {
             newXishu[i]=1;
         }
-        for (int i=0;i<items.size();i++)//对没个多项式内部的数字相乘化简
+        for (int i=0;i<newItems.size();i++)//对没个多项式内部的数字相乘化简
         {
-            factors = items.get(i).split("//*");//用*分离出多项式的每个因子
+            factors = newItems.get(i).split("//*");//用*分离出多项式的每个因子
             for (int j = 0; j < factors.length; j++)//计算系数
             {
                 if (isInteger(factors[j]))//如果是数字
@@ -330,10 +397,41 @@ public class experiment_1 {
                     newXishu[i] *= Integer.parseInt(factors[j]);
                 }
             }
-
         }
-        return null;
+        for (int i=0;i<newItems.size();i++)//合并同类项
+        {
+        	for(int j=i+1;j<newItems.size();j++)
+        	{
+        		if(isSameItem(newItems.get(i),newItems.get(j)))//如果是同类项
+        		{
+        			tmpXishu=signArr[i]*newXishu[i]+signArr[j]*newXishu[j];//计算新的系数
+        			tmpItem=Integer.toString(tmpXishu);
+        			
+        			factors = newItems.get(i).split("//*");//用*分离出多项式的每个因子
+                    for (int k = 0; k < factors.length; k++)//重新对多项式组合
+                    {
+                        if (!isInteger(factors[j]))//如果不是数字
+                        {
+                            tmpItem+=("*"+factors[k]);
+                        }
+                    }
+                    newItems.set(i, tmpItem);//更新i位置项
+                    newItems.remove(j);//删除j位置项
+        		}
+        	}
+        }
+        if(newItems.size()==0){
+        	return "";
+        }
+        else{
+        	newExpression=newItems.get(0);
+	        for (int i = 1; i < newItems.size(); i++) {//合成最终化简结果
+	        	newExpression += "*" + newItems.get(i);
+			}
+        }
+        return newExpression;
     }
+	
 }
 
 
