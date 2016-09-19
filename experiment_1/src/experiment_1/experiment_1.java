@@ -6,73 +6,77 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class experiment_1 {
+
 	//letter numbser新表达式需要初始化
 	public static void  main (String[] args){
 		//variable
 		@SuppressWarnings("resource")
 		Scanner in=new Scanner(System.in);
-		String expression=null;
-		String end_expression=null;
-		String[] xiang;
-		boolean judge=false;
-		int choice=0;
+		String expression=null;//输入的表达式或者是！命令行
+		String end_expression=null;//这里存放的是表达式，当expression输入的是正确的表达式时，将end_expression更新
+		String[] xiang;//这里存放的是将表达式分解为项的String数组
+		boolean judge=false;//判断表达式是否正确
+		int choice=0;//选择
 		ArrayList<String>  number = new ArrayList<String> ();//记录赋值函数的值
 		ArrayList<String>  letter = new ArrayList<String> ();//赋值函数的类型
-		ArrayList<String>  fuhao = new ArrayList<String> ();
+		ArrayList<String>  fuhao = new ArrayList<String> ();//存放表达式中的+号或者是-号的位置顺序
 		char VarDerivative = 0;//保证求导变量的类型
 		int j=0;
 		int x=0;
 		int y=0;
+
 		while(true){
 			choice=0;
-			expression=in.nextLine();
-			expression=change(expression);
-			judge=expression(expression, expression.length());
-			if (expression.length()>=9 && expression.substring(0, 9).equals("!simplify")){
+			expression=in.nextLine();//输入
+			fuhao=myfuhao(expression);//获得输入的符号，不管是不是正确的表达式或者是赋值求导指令
+			//expression=change(expression,fuhao);//将表达式转变为标准的表达式（无论表达式是否正确或者是输入的赋值求导指令
+
+			judge=expression(expression, expression.length());//判断表达式是否正确
+			if (expression.length()>=9 && expression.substring(0, 9).equals("!simplify")){//如果是赋值选择2
 				choice=2;
 			}
-			else if(expression.length()>=4 && expression.substring(0, 4).equals("!d/d")){
+			else if(expression.length()>=4 && expression.substring(0, 4).equals("!d/d")){//如果是求导选择3
 				choice=3;
 			}
 			else{
-				choice=1;
+				choice=1;//其他情况选择1
 			}
 			switch(choice)
 			{
-			case 1://输入
-				if (judge){
+			case 1:
+				if (judge){//如果表达式正确，则输出表达式，并更新end_expression
 					System.out.println(expression);
 					end_expression=expression;
 				}
-				else{
+				else{//不正确则输出错误信息
 					System.out.println("The expression is wrong!Stupid!");
 					//System.out.println(end_expression);
 				}
 				break;
-			case 2://赋值
+			case 2:
 				if (end_expression==null){
 					System.out.println("Error There is no expression!");//在没有表达式的情况下无法赋值
 				}
 				else{
-					for (int i=expression.length()-1;i>=0;i--){
+					for (int i=expression.length()-1;i>=0;i--){//获得要赋值的变量
 						if(expression.charAt(i)=='='){
 							j=i;
-							number.add(expression.substring(i+1,j+2));
+							number.add(expression.substring(i+1,j+2));//获得要赋值变量的值
 						}
 						else if(expression.charAt(i)==' '){
-							letter.add(expression.substring(i+1, j));
+							letter.add(expression.substring(i+1, j));//获得要赋值变量的名称
 						}
 					}
-					simplify(end_expression,letter,number);
+					simplify(end_expression,letter,number);//计算赋值后的结果，在函数中输出
 				}
 				break;
-			case 3://求导
+			case 3:
 				if(end_expression==null){
 					System.out.println("Error There is no expression!");//在没有表达式的情况下无法求导
 				}
 				else{//有了表达式
 					//首先要将求导的变量求出来 变量只能是在 !d/d()括号里面的值 "()"是不能存在的 且变量只能有字母组成
-					VarDerivative=expression.charAt(4);
+					VarDerivative=expression.charAt(4);//获得要求导的变量 这里变量只能是单个字符
 					j=0;
 					/*System.out.println(VarDerivative);
 					for (int i=0;i<expression.length();i++){
@@ -90,16 +94,8 @@ public class experiment_1 {
 					}*/
 					xiang=splitby_jia(end_expression);
 					//System.out.println(1);
-					for (int i=0;i<end_expression.length();i++){
-						if(end_expression.charAt(i)=='+'){
-							fuhao.add("+");
-						}
-						else if(end_expression.charAt(i)=='-'){
-							fuhao.add("-");
-						}
-					}
-					
-					derivative(xiang,VarDerivative,end_expression,fuhao);
+					fuhao=myfuhao(end_expression);
+					derivative(xiang,VarDerivative,end_expression,fuhao);//输出求导后的结果，在函数中输出
 				}
 				break;
 			default:
@@ -194,8 +190,8 @@ public class experiment_1 {
 						xishu[i]=1;
 					}
 				}*/
-				System.out.println("测试");
-				System.out.print(varNum[i]+" ");//测试
+				//System.out.println("测试");
+				//System.out.print(varNum[i]+" ");//测试
 				//System.out.println(xishu[i]);
 
 			}
@@ -208,8 +204,8 @@ public class experiment_1 {
 			for (int i=0;i<itemCount.length;i++){//合成求导后的项
 				if(varNum[i]!=0){
 					if(i<itemCount.length-1){
-						System.out.println(fuhao);
-						System.out.println(fuhao.get(i));
+						//System.out.println(fuhao);
+						//System.out.println(fuhao.get(i));
 						newfuhao.add(fuhao.get(i));
 					}
 					//System.out.println(Integer.toString(xishu[i])+"*"+itemCount[i].replaceFirst(String.valueOf(var), String.valueOf(varNum[i])));
@@ -235,41 +231,54 @@ public class experiment_1 {
 	public static String[] splitby_cheng(String str){//按乘法分割
 		return str.split("\\*");
 	}
-	public static String change(String expression){//将输入的表达式进行修改
+	public static ArrayList<String> myfuhao(String end_expression){
+		ArrayList<String> fuhao=new ArrayList<String>();
+		for (int i=0;i<end_expression.length();i++){
+			if(end_expression.charAt(i)=='+'){
+				fuhao.add("+");
+			}
+			else if(end_expression.charAt(i)=='-'){
+				fuhao.add("-");
+			}
+		}
+		return fuhao;
+	}
+	public static String change(String expression,ArrayList<String> fuhao){//将输入的表达式进行修改
 		String change_expression=null;
 		String end_expression="";
 		String[] str;
 		String[] xiang;
-		String newstr;
-		String newxiang;
+		String newstr = null;
+		String newxiang = null;
 		int xishu=0;
+		int fuhao1=0;//标记到第几个符号了
 		change_expression=expression.replace("\t", "");//将tab删掉
 		change_expression=change_expression.replace(" ", "");//将空格删掉
-		str=change_expression.split("//+|//-");
-		for (int i=0;i<str.length;i++){
-			newstr=str[i];
-			for(int j=0;j<str[i].length();j++){
-				if(j<str[i].length()-1){
-					if(str[i].charAt(j)>='0'&&str[i].charAt(j)<='9'){
-						if((str[i].charAt(j+1)>='a'&&str[i].charAt(j+1)<='z')||(str[i].charAt(j+1)>='A'&&str[i].charAt(j+1)<='Z')){
-							newstr=newstr.substring(0,j+1)+"*"+newstr.substring(j+1);
-						}
+
+		//System.out.println(str+" ");
+		for (int i=0;i<change_expression.length();i++){
+			if(i<change_expression.length()-1){
+				if(change_expression.charAt(i)>='0'&&change_expression.charAt(i)<='9'){
+					if((change_expression.charAt(i+1)>='a'&&change_expression.charAt(i+1)<='z')||(change_expression.charAt(i+1)>='A'&&change_expression.charAt(i+1)<='Z')){
+						//System.out.print(change_expression+" ");
+						change_expression=change_expression.substring(0,i+1)+"*"+change_expression.substring(i+1);
+						//System.out.println(change_expression+" ");
 					}
 				}
 			}
-			str[i]=newstr;
-			end_expression+=str[i];
-			System.out.print(end_expression+" ");
 		}
-		str=end_expression.split("//+|//-");
-		for (int i=0;i<str.length;i++){
+		end_expression=change_expression;
+		str=end_expression.split("\\+|\\-");
+		System.out.println(end_expression);
+		for (int i=0;i<str.length;i++){//依次访问每个项
 			newstr=str[i];
-			xiang=str[i].split("//*");
-			for(int j=0;j<xiang.length;j++){
+			xiang=str[i].split("\\*");
+			for(int j=0;j<xiang.length;j++){//对每个项访问
 				newxiang=xiang[j];
-				for(int k=0;k<xiang[i].length();k++){
+				System.out.println("newxiang1"+"   "+newxiang);
+				for(int k=0;k<xiang[j].length();k++){
 					if(xiang[j].charAt(k)=='^'){
-						for (int l=k+1;l<xiang[j].length();l++){
+						for (int l=k+1;l<xiang[j].length();l++){//计算^后面的系数是多少
 							if(xiang[j].charAt(l)<'0'||xiang[j].charAt(l)>'9'){//出现错误，直接返回，在judge中会判断为错误表达式
 								return end_expression;
 							}
@@ -277,15 +286,35 @@ public class experiment_1 {
 								xishu=xishu*10+(xiang[j].charAt(l)-48);
 							}
 						}
+						newxiang=newxiang.substring(0, newxiang.indexOf("^"));
+						for (int n=0;n<k;n++){
+							newxiang=xiang[n]+"*"+newxiang;
+						}
+						System.out.println("newxiang3"+"   "+newxiang);
+						for (int m=0;m<xishu;m++){
+							newxiang+="*"+xiang[j].substring(0, xiang[j].indexOf("^"));
+						}
+						System.out.println("newxiang3"+"   "+newxiang);
+						for (int n=k+1;n<xiang.length;n++){
+							newxiang+="*"+xiang[n];
+						}
+						xiang[j]=newxiang;
+						System.out.println("newxiang3"+"   "+newxiang);
 					}
-					newxiang=xiang[j].substring(0, k);
-					for (int m=0;m<xishu;m++){
-						newxiang+="*"+xiang[j-1];
-					}
-					newxiang+=xiang[j].substring(k+1);
-					xiang[j]=newxiang;
 				}
 			}
+			str[i]=newxiang;
+			System.out.println(str[i]);
+		}
+		System.out.println("fuhao"+"   "+fuhao);
+		System.out.println("str"+"   "+str.length);
+		//每个项都处理完了，该合并项了
+		for (int i=0;i<str.length;i++){
+			end_expression+=str[i];
+			if(i<expression.length()-1){
+				end_expression+=fuhao.get(fuhao1++);
+			}
+			System.out.println("end_expression"+"   "+end_expression);
 		}
 		return end_expression;
 	}
