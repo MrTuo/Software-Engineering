@@ -158,7 +158,14 @@ public class experiment_1 {
 			end=end.replace(letter.get(i), number.get(i));
 			//System.out.println(end);
 		}
+		System.out.println("Before make simple");
 		System.out.println(end);
+		//将化简结果合并简化 by妥
+		ArrayList<String> newItem = getItems(end);//获取多项式
+		int[] newSign = getSign(end, newItem);//获取多项式符号数组
+		String newExpression = makeSimple(end, newItem, newSign);
+		System.out.println("After make simple");
+		System.out.println(newExpression);
 		//return end;
 	}
 	@SuppressWarnings("null")
@@ -182,24 +189,7 @@ public class experiment_1 {
 						varNum[i]++;
 					}
 				}
-				/*for (int j=0;j<itemCount[i].length();j++){//计算系数
-					if(itemCount[i].charAt(j)>='0'&&itemCount[i].charAt(j)<='9'){
-						xishu[i]=xishu[i]*10+(itemCount[i].charAt(j)-48);
-					}
-					else{
-						xishu[i]=1;
-					}
-				}*/
-				//System.out.println("测试");
-				//System.out.print(varNum[i]+" ");//测试
-				//System.out.println(xishu[i]);
-
 			}
-			/*for (int i=0;i<itemCount.length;i++){
-				System.out.println("测试");
-				System.out.print(itemCount[i]);//测试
-			}*/
-
 
 			for (int i=0;i<itemCount.length;i++){//合成求导后的项
 				if(varNum[i]!=0){
@@ -222,8 +212,16 @@ public class experiment_1 {
 				}
 			}
 		}
+		
+		//将化简结果合并简化 by妥
+		System.out.println("Before make simple");
 		System.out.println(end);
-		return end;
+		ArrayList<String> newItem = getItems(end);//获取多项式
+		int[] newSign = getSign(end, newItem);//获取多项式符号数组
+		String newExpression = makeSimple(end, newItem, newSign);
+		System.out.println("After make simple");
+		System.out.println(newExpression);
+		return newExpression;
 	}
 	public static String[] splitby_jia(String str){//按加法分割
 		return str.split("\\+|\\-");
@@ -340,7 +338,7 @@ public class experiment_1 {
     */
     public static boolean isInteger(String fact)
     {
-        Pattern pattern = Pattern.compile("[0-9]*");
+        Pattern pattern = Pattern.compile("[0-9]*|-[0-9]*");
         return pattern.matcher(fact).matches();
     }
     
@@ -354,7 +352,14 @@ public class experiment_1 {
     {
     	int[] sign = new int[items.size()];
     	int j=0;
-    	for(int i = 0;i<expression.length();i++)
+    	if(expression.charAt(0) == '-'){//处理第一个多项式
+    		sign[j++] = -1;
+    	}
+    	else{
+    		sign[j++] = 1;
+    	}
+    
+    	for(int i = 1;i<expression.length();i++)//处理后续多项式
     	{
     		if(expression.charAt(i) == '+')
     		{
@@ -379,15 +384,29 @@ public class experiment_1 {
     public static boolean isSameItem(String string1, String string2)
     {
 		String[] factor1,factor2;
-		factor1=string1.split("//*|(/d+)");//按*号或者数字拆分
-		factor2=string2.split("//*|(/d+)");
-		if(factor1.length != factor2.length){
-			return false;
-		}
+		ArrayList<String> newFactors1 = new ArrayList<String>();
+		ArrayList<String> newFactors2 = new ArrayList<String>();
+		factor1=string1.split("\\*");//按*号或者数字拆分
+		factor2=string2.split("\\*");
+		
 		Arrays.sort(factor1);
 		Arrays.sort(factor2);
+		for (int i = 0; i < factor1.length; i++) {
+			if(!isInteger(factor1[i])){
+				newFactors1.add(factor1[i]);
+			}
+		}
 		for (int i = 0; i < factor2.length; i++) {
-			if(factor1[i]!=factor2[i]){
+			if(!isInteger(factor2[i])){
+				newFactors2.add(factor2[i]);
+			}
+		}
+		
+		if(newFactors1.size() != newFactors2.size()){
+			return false;
+		}
+		for (int i = 0; i < newFactors2.size(); i++) {
+			if(!newFactors1.get(i).equals(newFactors2.get(i))){
 				return false;
 			}
 		}
@@ -416,9 +435,9 @@ public class experiment_1 {
         {
             newXishu[i]=1;
         }
-        for (int i=0;i<newItems.size();i++)//对没个多项式内部的数字相乘化简
+        for (int i=0;i<newItems.size();i++)//对每个多项式内部的数字相乘化简
         {
-            factors = newItems.get(i).split("//*");//用*分离出多项式的每个因子
+            factors = newItems.get(i).split("\\*");//用*分离出多项式的每个因子
             for (int j = 0; j < factors.length; j++)//计算系数
             {
                 if (isInteger(factors[j]))//如果是数字
@@ -426,6 +445,16 @@ public class experiment_1 {
                     newXishu[i] *= Integer.parseInt(factors[j]);
                 }
             }
+            
+            tmpItem = Integer.toString(newXishu[i]);
+            for (int k = 0; k < factors.length; k++)//重新对多项式组合
+            {
+                if (!isInteger(factors[k]))//如果不是数字
+                {
+                    tmpItem+=("*"+factors[k]);
+                }
+            }
+            newItems.set(i, tmpItem);
         }
         for (int i=0;i<newItems.size();i++)//合并同类项
         {
@@ -436,16 +465,26 @@ public class experiment_1 {
         			tmpXishu=signArr[i]*newXishu[i]+signArr[j]*newXishu[j];//计算新的系数
         			tmpItem=Integer.toString(tmpXishu);
         			
-        			factors = newItems.get(i).split("//*");//用*分离出多项式的每个因子
+        			factors = newItems.get(i).split("\\*");//用*分离出多项式的每个因子
                     for (int k = 0; k < factors.length; k++)//重新对多项式组合
                     {
-                        if (!isInteger(factors[j]))//如果不是数字
+                        if (!isInteger(factors[k]))//如果不是数字
                         {
                             tmpItem+=("*"+factors[k]);
                         }
                     }
                     newItems.set(i, tmpItem);//更新i位置项
                     newItems.remove(j);//删除j位置项
+                    
+                    newXishu[i]=tmpXishu;//更新i位置系数
+                    
+                    for(int l = j; l<newItems.size();l++){
+                    	signArr[l]=signArr[l+1];//更新符号数组，j位置前移
+                    	newXishu[l]=newXishu[l+1];//更新系数数组，j位置前移
+                    }                  
+                    
+                    j-=1;//删除后，新的项占了原来位置，需要减一，否则判断同类项会露项。
+                    
         		}
         	}
         }
@@ -455,7 +494,7 @@ public class experiment_1 {
         else{
         	newExpression=newItems.get(0);
 	        for (int i = 1; i < newItems.size(); i++) {//合成最终化简结果
-	        	newExpression += "*" + newItems.get(i);
+	        	newExpression += "+" + newItems.get(i);
 			}
         }
         return newExpression;
