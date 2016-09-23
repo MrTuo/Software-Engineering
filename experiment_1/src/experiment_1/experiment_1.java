@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import experiment_1.Expressions;
+import experiment_1.Expressions; 
 
 public class experiment_1 {
 	//letter numbser新表达式需要初始化
@@ -20,14 +20,14 @@ public class experiment_1 {
 		char VarDerivative = 0;//保证求导变量的类型
 		int j=0;
 		String tmpExpression ="";
-
+		
 		Expressions clsExpression = new Expressions();//创建表达式对象
-
+		
 		while(true){
 			choice=0;
 			expression=in.nextLine();//输入
 			fuhao=myfuhao(expression);//获得输入的符号，不管是不是正确的表达式或者是赋值求导指令
-
+			
 
 			if (expression.length()>=9 && expression.substring(0, 9).equals("!simplify")){//如果是赋值选择2
 				choice=2;
@@ -43,48 +43,48 @@ public class experiment_1 {
 			}
 			switch(choice)
 			{
-				case 1:
+			case 1:
 					expression=change(expression,fuhao);//将表达式转变为标准的表达式（无论表达式是否正确或者是输入的赋值求导指令
 					clsExpression.setExpressions(expression);//设置表达式
-					break;
-				case 2:
-					tmpExpression = clsExpression.getExpression();
-					if (tmpExpression==""){
-						System.out.println("Error There is no expression!");//在没有表达式的情况下无法赋值
-					}
-					else{
-						for (int i=expression.length()-1;i>=0;i--){//获得要赋值的变量
-							if(expression.charAt(i)=='='){
-								j=i;
-								number.add(expression.substring(i+1,j+2));//获得要赋值变量的值
-							}
-							else if(expression.charAt(i)==' '){
-								letter.add(expression.substring(i+1, j));//获得要赋值变量的名称
-							}
+				break;
+			case 2:
+				tmpExpression = clsExpression.getExpression();
+				if (tmpExpression==""){
+					System.out.println("Error There is no expression!");//在没有表达式的情况下无法赋值
+				}
+				else{
+					for (int i=expression.length()-1;i>=0;i--){//获得要赋值的变量
+						if(expression.charAt(i)=='='){
+							j=i;
+							number.add(expression.substring(i+1,j+2));//获得要赋值变量的值
 						}
-						System.out.println(clsExpression.simplify(letter,number));//计算赋值后的结果，在函数中输出
+						else if(expression.charAt(i)==' '){
+							letter.add(expression.substring(i+1, j));//获得要赋值变量的名称
+						}
 					}
-					break;
-				case 3:
-					tmpExpression = clsExpression.getExpression();
-					if(tmpExpression==""){
-						System.out.println("Error There is no expression!");//在没有表达式的情况下无法求导
-					}
-					else{//有了表达式
-						//首先要将求导的变量求出来 变量只能是在 !d/d()括号里面的值 "()"是不能存在的 且变量只能有字母组成
-						VarDerivative=tmpExpression.charAt(4);//获得要求导的变量 这里变量只能是单个字符
-						j=0;
-						xiang=tmpExpression.split("\\+|\\-");
-						fuhao=myfuhao(tmpExpression);
-						System.out.println(clsExpression.derivative(xiang,VarDerivative,tmpExpression,fuhao));//输出求导后的结果，在函数中输出
-					}
-					break;
-				default:
-					break;
+					System.out.println(clsExpression.simplify(letter,number));//计算赋值后的结果，在函数中输出
+				}
+				break;
+			case 3:
+				tmpExpression = clsExpression.getExpression();
+				if(tmpExpression==""){
+					System.out.println("Error There is no expression!");//在没有表达式的情况下无法求导
+				}
+				else{//有了表达式
+					//首先要将求导的变量求出来 变量只能是在 !d/d()括号里面的值 "()"是不能存在的 且变量只能有字母组成
+					VarDerivative=tmpExpression.charAt(4);//获得要求导的变量 这里变量只能是单个字符
+					j=0;
+					xiang=tmpExpression.split("\\+|\\-");
+					fuhao=myfuhao(tmpExpression);
+					System.out.println(clsExpression.derivative(xiang,VarDerivative,tmpExpression,fuhao));//输出求导后的结果，在函数中输出
+				}
+				break;
+			default:
+				break;
 			}
 		}
 	}
-
+	
 	/**
 	 * 获取表达式的多项式的符号
 	 * @param end_expression 输入表达式
@@ -175,8 +175,8 @@ public class experiment_1 {
 			str[i]=newxiang;
 //			System.out.println(str[i]);
 		}
-		//	System.out.println("fuhao"+"   "+fuhao);
-		//	System.out.println("str"+"   "+str.length);
+	//	System.out.println("fuhao"+"   "+fuhao);
+	//	System.out.println("str"+"   "+str.length);
 		//每个项都处理完了，该合并项了
 		end_expression="";
 		for (int i=0;i<str.length;i++){
