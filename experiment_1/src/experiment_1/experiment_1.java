@@ -6,73 +6,77 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class experiment_1 {
-	//letter numbserĞÂ±í´ïÊ½ĞèÒª³õÊ¼»¯
+
+	//letter numbseræ–°è¡¨è¾¾å¼éœ€è¦åˆå§‹åŒ–
 	public static void  main (String[] args){
 		//variable
 		@SuppressWarnings("resource")
 		Scanner in=new Scanner(System.in);
-		String expression=null;
-		String end_expression=null;
-		String[] xiang;
-		boolean judge=false;
-		int choice=0;
-		ArrayList<String>  number = new ArrayList<String> ();//¼ÇÂ¼¸³Öµº¯ÊıµÄÖµ
-		ArrayList<String>  letter = new ArrayList<String> ();//¸³Öµº¯ÊıµÄÀàĞÍ
-		ArrayList<String>  fuhao = new ArrayList<String> ();
-		char VarDerivative = 0;//±£Ö¤Çóµ¼±äÁ¿µÄÀàĞÍ
+		String expression=null;//è¾“å…¥çš„è¡¨è¾¾å¼æˆ–è€…æ˜¯ï¼å‘½ä»¤è¡Œ
+		String end_expression=null;//è¿™é‡Œå­˜æ”¾çš„æ˜¯è¡¨è¾¾å¼ï¼Œå½“expressionè¾“å…¥çš„æ˜¯æ­£ç¡®çš„è¡¨è¾¾å¼æ—¶ï¼Œå°†end_expressionæ›´æ–°
+		String[] xiang;//è¿™é‡Œå­˜æ”¾çš„æ˜¯å°†è¡¨è¾¾å¼åˆ†è§£ä¸ºé¡¹çš„Stringæ•°ç»„
+		boolean judge=false;//åˆ¤æ–­è¡¨è¾¾å¼æ˜¯å¦æ­£ç¡®
+		int choice=0;//é€‰æ‹©
+		ArrayList<String>  number = new ArrayList<String> ();//è®°å½•èµ‹å€¼å‡½æ•°çš„å€¼
+		ArrayList<String>  letter = new ArrayList<String> ();//èµ‹å€¼å‡½æ•°çš„ç±»å‹
+		ArrayList<String>  fuhao = new ArrayList<String> ();//å­˜æ”¾è¡¨è¾¾å¼ä¸­çš„+å·æˆ–è€…æ˜¯-å·çš„ä½ç½®é¡ºåº
+		char VarDerivative = 0;//ä¿è¯æ±‚å¯¼å˜é‡çš„ç±»å‹
 		int j=0;
 		int x=0;
 		int y=0;
+
 		while(true){
 			choice=0;
-			expression=in.nextLine();
-			expression=change(expression);
-			judge=expression(expression, expression.length());
-			if (expression.length()>=9 && expression.substring(0, 9).equals("!simplify")){
+			expression=in.nextLine();//è¾“å…¥
+			fuhao=myfuhao(expression);//è·å¾—è¾“å…¥çš„ç¬¦å·ï¼Œä¸ç®¡æ˜¯ä¸æ˜¯æ­£ç¡®çš„è¡¨è¾¾å¼æˆ–è€…æ˜¯èµ‹å€¼æ±‚å¯¼æŒ‡ä»¤
+			expression=change(expression,fuhao);//å°†è¡¨è¾¾å¼è½¬å˜ä¸ºæ ‡å‡†çš„è¡¨è¾¾å¼ï¼ˆæ— è®ºè¡¨è¾¾å¼æ˜¯å¦æ­£ç¡®æˆ–è€…æ˜¯è¾“å…¥çš„èµ‹å€¼æ±‚å¯¼æŒ‡ä»¤
+
+			judge=expression(expression, expression.length());//åˆ¤æ–­è¡¨è¾¾å¼æ˜¯å¦æ­£ç¡®
+			if (expression.length()>=9 && expression.substring(0, 9).equals("!simplify")){//å¦‚æœæ˜¯èµ‹å€¼é€‰æ‹©2
 				choice=2;
 			}
-			else if(expression.length()>=4 && expression.substring(0, 4).equals("!d/d")){
+			else if(expression.length()>=4 && expression.substring(0, 4).equals("!d/d")){//å¦‚æœæ˜¯æ±‚å¯¼é€‰æ‹©3
 				choice=3;
 			}
 			else{
-				choice=1;
+				choice=1;//å…¶ä»–æƒ…å†µé€‰æ‹©1
 			}
 			switch(choice)
 			{
-			case 1://ÊäÈë
-				if (judge){
-					System.out.println(expression);
+			case 1:
+				if (judge){//å¦‚æœè¡¨è¾¾å¼æ­£ç¡®ï¼Œåˆ™è¾“å‡ºè¡¨è¾¾å¼ï¼Œå¹¶æ›´æ–°end_expression
+					System.out.println("æ”¹å˜åçš„è¡¨è¾¾å¼:"+expression);
 					end_expression=expression;
 				}
-				else{
+				else{//ä¸æ­£ç¡®åˆ™è¾“å‡ºé”™è¯¯ä¿¡æ¯
 					System.out.println("The expression is wrong!Stupid!");
 					//System.out.println(end_expression);
 				}
 				break;
-			case 2://¸³Öµ
+			case 2:
 				if (end_expression==null){
-					System.out.println("Error There is no expression!");//ÔÚÃ»ÓĞ±í´ïÊ½µÄÇé¿öÏÂÎŞ·¨¸³Öµ
+					System.out.println("Error There is no expression!");//åœ¨æ²¡æœ‰è¡¨è¾¾å¼çš„æƒ…å†µä¸‹æ— æ³•èµ‹å€¼
 				}
 				else{
-					for (int i=expression.length()-1;i>=0;i--){
+					for (int i=expression.length()-1;i>=0;i--){//è·å¾—è¦èµ‹å€¼çš„å˜é‡
 						if(expression.charAt(i)=='='){
 							j=i;
-							number.add(expression.substring(i+1,j+2));
+							number.add(expression.substring(i+1,j+2));//è·å¾—è¦èµ‹å€¼å˜é‡çš„å€¼
 						}
 						else if(expression.charAt(i)==' '){
-							letter.add(expression.substring(i+1, j));
+							letter.add(expression.substring(i+1, j));//è·å¾—è¦èµ‹å€¼å˜é‡çš„åç§°
 						}
 					}
-					simplify(end_expression,letter,number);
+					simplify(end_expression,letter,number);//è®¡ç®—èµ‹å€¼åçš„ç»“æœï¼Œåœ¨å‡½æ•°ä¸­è¾“å‡º
 				}
 				break;
-			case 3://Çóµ¼
+			case 3:
 				if(end_expression==null){
-					System.out.println("Error There is no expression!");//ÔÚÃ»ÓĞ±í´ïÊ½µÄÇé¿öÏÂÎŞ·¨Çóµ¼
+					System.out.println("Error There is no expression!");//åœ¨æ²¡æœ‰è¡¨è¾¾å¼çš„æƒ…å†µä¸‹æ— æ³•æ±‚å¯¼
 				}
-				else{//ÓĞÁË±í´ïÊ½
-					//Ê×ÏÈÒª½«Çóµ¼µÄ±äÁ¿Çó³öÀ´ ±äÁ¿Ö»ÄÜÊÇÔÚ !d/d()À¨ºÅÀïÃæµÄÖµ "()"ÊÇ²»ÄÜ´æÔÚµÄ ÇÒ±äÁ¿Ö»ÄÜÓĞ×ÖÄ¸×é³É
-					VarDerivative=expression.charAt(4);
+				else{//æœ‰äº†è¡¨è¾¾å¼
+					//é¦–å…ˆè¦å°†æ±‚å¯¼çš„å˜é‡æ±‚å‡ºæ¥ å˜é‡åªèƒ½æ˜¯åœ¨ !d/d()æ‹¬å·é‡Œé¢çš„å€¼ "()"æ˜¯ä¸èƒ½å­˜åœ¨çš„ ä¸”å˜é‡åªèƒ½æœ‰å­—æ¯ç»„æˆ
+					VarDerivative=expression.charAt(4);//è·å¾—è¦æ±‚å¯¼çš„å˜é‡ è¿™é‡Œå˜é‡åªèƒ½æ˜¯å•ä¸ªå­—ç¬¦
 					j=0;
 					/*System.out.println(VarDerivative);
 					for (int i=0;i<expression.length();i++){
@@ -90,16 +94,8 @@ public class experiment_1 {
 					}*/
 					xiang=splitby_jia(end_expression);
 					//System.out.println(1);
-					for (int i=0;i<end_expression.length();i++){
-						if(end_expression.charAt(i)=='+'){
-							fuhao.add("+");
-						}
-						else if(end_expression.charAt(i)=='-'){
-							fuhao.add("-");
-						}
-					}
-					
-					derivative(xiang,VarDerivative,end_expression,fuhao);
+					fuhao=myfuhao(end_expression);
+					derivative(xiang,VarDerivative,end_expression,fuhao);//è¾“å‡ºæ±‚å¯¼åçš„ç»“æœï¼Œåœ¨å‡½æ•°ä¸­è¾“å‡º
 				}
 				break;
 			default:
@@ -109,7 +105,7 @@ public class experiment_1 {
 			 
 		}
 	}
-	public static boolean expression(String str,int len){//ÊäÈë±í´ïÊ½
+	public static boolean expression(String str,int len){//è¾“å…¥è¡¨è¾¾å¼
 		char a=0,b=0,c=0;//b is behind a,c is in front of a
 		int x=0;//judge the number is the first one or not
 		for (int i=0;i<len;i++){;
@@ -152,7 +148,7 @@ public class experiment_1 {
 		} 
 		return true;
 	}
-	public static void simplify(String expression,ArrayList<String> letter,ArrayList<String> number){//³õÊ¼»¯¸³Öµ
+	public static void simplify(String expression,ArrayList<String> letter,ArrayList<String> number){//åˆå§‹åŒ–èµ‹å€¼
 		String end=null;
 		end =expression;
 			/*for (int i=0;i<letter.size();i++){
@@ -162,13 +158,20 @@ public class experiment_1 {
 			end=end.replace(letter.get(i), number.get(i));
 			//System.out.println(end);
 		}
+		System.out.println("Before make simple");
 		System.out.println(end);
+		//å°†åŒ–ç®€ç»“æœåˆå¹¶ç®€åŒ– byå¦¥
+		ArrayList<String> newItem = getItems(end);//è·å–å¤šé¡¹å¼
+		int[] newSign = getSign(end, newItem);//è·å–å¤šé¡¹å¼ç¬¦å·æ•°ç»„
+		String newExpression = makeSimple(end, newItem, newSign);
+		System.out.println("After make simple");
+		System.out.println(newExpression);
 		//return end;
 	}
 	@SuppressWarnings("null")
-	public static String derivative(String[] itemCount,char var,String expression,ArrayList<String> fuhao){//Çóµ¼³õÊ¼»¯
-		int varNum[];//±äÁ¿µÄ¸öÊı
-		int xishu[];//ÏîµÄÏµÊı
+	public static String derivative(String[] itemCount,char var,String expression,ArrayList<String> fuhao){//æ±‚å¯¼åˆå§‹åŒ–
+		int varNum[];//å˜é‡çš„ä¸ªæ•°
+		int xishu[];//é¡¹çš„ç³»æ•°
 		ArrayList<String>  newitemCount = new ArrayList<String> ();
 		ArrayList<String>  newfuhao = new ArrayList<String> ();
 		String end="";
@@ -181,35 +184,18 @@ public class experiment_1 {
 		}
 		else{
 			for (int i=0;i<itemCount.length;i++){
-				for (int j=0;j<itemCount[i].length();j++){//¼ÆËã±äÁ¿µÄ¸öÊı
+				for (int j=0;j<itemCount[i].length();j++){//è®¡ç®—å˜é‡çš„ä¸ªæ•°
 					if(var==itemCount[i].charAt(j)){
 						varNum[i]++;
 					}
 				}
-				/*for (int j=0;j<itemCount[i].length();j++){//¼ÆËãÏµÊı
-					if(itemCount[i].charAt(j)>='0'&&itemCount[i].charAt(j)<='9'){
-						xishu[i]=xishu[i]*10+(itemCount[i].charAt(j)-48);
-					}
-					else{
-						xishu[i]=1;
-					}
-				}*/
-				System.out.println("²âÊÔ");
-				System.out.print(varNum[i]+" ");//²âÊÔ
-				//System.out.println(xishu[i]);
-
 			}
-			/*for (int i=0;i<itemCount.length;i++){
-				System.out.println("²âÊÔ");
-				System.out.print(itemCount[i]);//²âÊÔ
-			}*/
 
-
-			for (int i=0;i<itemCount.length;i++){//ºÏ³ÉÇóµ¼ºóµÄÏî
+			for (int i=0;i<itemCount.length;i++){//åˆæˆæ±‚å¯¼åçš„é¡¹
 				if(varNum[i]!=0){
 					if(i<itemCount.length-1){
-						System.out.println(fuhao);
-						System.out.println(fuhao.get(i));
+						//System.out.println(fuhao);
+						//System.out.println(fuhao.get(i));
 						newfuhao.add(fuhao.get(i));
 					}
 					//System.out.println(Integer.toString(xishu[i])+"*"+itemCount[i].replaceFirst(String.valueOf(var), String.valueOf(varNum[i])));
@@ -217,7 +203,7 @@ public class experiment_1 {
 					//System.out.println(newitemCount);
 				}
 			}
-			for (int i=0;i<newitemCount.size();i++){//½«ºÏ³ÉµÄÏîÁ¬ÆğÀ´
+			for (int i=0;i<newitemCount.size();i++){//å°†åˆæˆçš„é¡¹è¿èµ·æ¥
 				if(i==0){
 					end+=newitemCount.get(i);
 				}
@@ -226,73 +212,120 @@ public class experiment_1 {
 				}
 			}
 		}
+		
+		//å°†åŒ–ç®€ç»“æœåˆå¹¶ç®€åŒ– byå¦¥
+		System.out.println("Before make simple");
 		System.out.println(end);
-		return end;
+		ArrayList<String> newItem = getItems(end);//è·å–å¤šé¡¹å¼
+		int[] newSign = getSign(end, newItem);//è·å–å¤šé¡¹å¼ç¬¦å·æ•°ç»„
+		String newExpression = makeSimple(end, newItem, newSign);
+		System.out.println("After make simple");
+		System.out.println(newExpression);
+		return newExpression;
 	}
-	public static String[] splitby_jia(String str){//°´¼Ó·¨·Ö¸î
+	public static String[] splitby_jia(String str){//æŒ‰åŠ æ³•åˆ†å‰²
 		return str.split("\\+|\\-");
 	}
-	public static String[] splitby_cheng(String str){//°´³Ë·¨·Ö¸î
+	public static String[] splitby_cheng(String str){//æŒ‰ä¹˜æ³•åˆ†å‰²
 		return str.split("\\*");
 	}
-	public static String change(String expression){//½«ÊäÈëµÄ±í´ïÊ½½øĞĞĞŞ¸Ä
+	public static ArrayList<String> myfuhao(String end_expression){
+		ArrayList<String> fuhao=new ArrayList<String>();
+		for (int i=0;i<end_expression.length();i++){
+			if(end_expression.charAt(i)=='+'){
+				fuhao.add("+");
+			}
+			else if(end_expression.charAt(i)=='-'){
+				fuhao.add("-");
+			}
+		}
+		return fuhao;
+	}
+	public static String change(String expression,ArrayList<String> fuhao){//å°†è¾“å…¥çš„è¡¨è¾¾å¼è¿›è¡Œä¿®æ”¹
 		String change_expression=null;
 		String end_expression="";
 		String[] str;
 		String[] xiang;
-		String newstr;
-		String newxiang;
+		String newxiang = null;
 		int xishu=0;
-		change_expression=expression.replace("\t", "");//½«tabÉ¾µô
-		change_expression=change_expression.replace(" ", "");//½«¿Õ¸ñÉ¾µô
-		str=change_expression.split("//+|//-");
-		for (int i=0;i<str.length;i++){
-			newstr=str[i];
-			for(int j=0;j<str[i].length();j++){
-				if(j<str[i].length()-1){
-					if(str[i].charAt(j)>='0'&&str[i].charAt(j)<='9'){
-						if((str[i].charAt(j+1)>='a'&&str[i].charAt(j+1)<='z')||(str[i].charAt(j+1)>='A'&&str[i].charAt(j+1)<='Z')){
-							newstr=newstr.substring(0,j+1)+"*"+newstr.substring(j+1);
-						}
+		int fuhao1=0;//æ ‡è®°åˆ°ç¬¬å‡ ä¸ªç¬¦å·äº†
+		change_expression=expression.replace("\t", "");//å°†tabåˆ æ‰
+		change_expression=change_expression.replace(" ", "");//å°†ç©ºæ ¼åˆ æ‰
+
+		//System.out.println(str+" ");
+		for (int i=0;i<change_expression.length();i++){
+			if(i<change_expression.length()-1){
+				if(change_expression.charAt(i)>='0'&&change_expression.charAt(i)<='9'){
+					if((change_expression.charAt(i+1)>='a'&&change_expression.charAt(i+1)<='z')||(change_expression.charAt(i+1)>='A'&&change_expression.charAt(i+1)<='Z')){
+						//System.out.print(change_expression+" ");
+						change_expression=change_expression.substring(0,i+1)+"*"+change_expression.substring(i+1);
+						//System.out.println(change_expression+" ");
 					}
 				}
 			}
-			str[i]=newstr;
-			end_expression+=str[i];
-			System.out.print(end_expression+" ");
 		}
-		str=end_expression.split("//+|//-");
-		for (int i=0;i<str.length;i++){
-			newstr=str[i];
-			xiang=str[i].split("//*");
-			for(int j=0;j<xiang.length;j++){
+		end_expression=change_expression;
+		str=end_expression.split("\\+|\\-");
+		System.out.println("è¾“å…¥çš„è¡¨è¾¾å¼:"+end_expression);
+		for (int i=0;i<str.length;i++){//ä¾æ¬¡è®¿é—®æ¯ä¸ªé¡¹
+			xiang=str[i].split("\\*");
+			for(int j=0;j<xiang.length;j++){//å¯¹æ¯ä¸ªé¡¹è®¿é—®
 				newxiang=xiang[j];
-				for(int k=0;k<xiang[i].length();k++){
+//				System.out.println("newxiang1"+"   "+newxiang);
+				for(int k=0;k<xiang[j].length();k++){
 					if(xiang[j].charAt(k)=='^'){
-						for (int l=k+1;l<xiang[j].length();l++){
-							if(xiang[j].charAt(l)<'0'||xiang[j].charAt(l)>'9'){//³öÏÖ´íÎó£¬Ö±½Ó·µ»Ø£¬ÔÚjudgeÖĞ»áÅĞ¶ÏÎª´íÎó±í´ïÊ½
+						for (int l=k+1;l<xiang[j].length();l++){//è®¡ç®—^åé¢çš„ç³»æ•°æ˜¯å¤šå°‘
+							if(xiang[j].charAt(l)<'0'||xiang[j].charAt(l)>'9'){//å‡ºç°é”™è¯¯ï¼Œç›´æ¥è¿”å›ï¼Œåœ¨judgeä¸­ä¼šåˆ¤æ–­ä¸ºé”™è¯¯è¡¨è¾¾å¼
 								return end_expression;
 							}
 							else{
 								xishu=xishu*10+(xiang[j].charAt(l)-48);
 							}
 						}
+						newxiang=newxiang.substring(0, newxiang.indexOf("^"));
+//						System.out.println("newxiang2"+"   "+newxiang);
+//						System.out.println("newxiang3"+"   "+newxiang);
+						for (int m=0;m<xishu-1;m++){
+							newxiang+="*"+xiang[j].substring(0, xiang[j].indexOf("^"));
+						}
+						xiang[j]=newxiang;
+//						System.out.println("newxiang3"+"   "+newxiang);
 					}
-					newxiang=xiang[j].substring(0, k);
-					for (int m=0;m<xishu;m++){
-						newxiang+="*"+xiang[j-1];
-					}
-					newxiang+=xiang[j].substring(k+1);
-					xiang[j]=newxiang;
 				}
 			}
+//			System.out.println("1=============");
+//			for (int n=0;n<xiang.length;n++){
+//				System.out.println(xiang[n]);
+//			}
+//			System.out.println("=============");
+			newxiang=xiang[0];
+			for (int n=1;n<xiang.length;n++){
+				newxiang+="*"+xiang[n];
+			}
+			str[i]=newxiang;
+//			System.out.println("*****"+str[i]);
+		}
+//		System.out.println("fuhao"+"   "+fuhao);
+//		System.out.println("str"+"   "+str.length);
+		//æ¯ä¸ªé¡¹éƒ½å¤„ç†å®Œäº†ï¼Œè¯¥åˆå¹¶é¡¹äº†
+		end_expression="";
+//		for (int i=0;i<str.length;i++){
+//			System.out.println("str"+"   "+str[i]);
+//		}
+		for (int i=0;i<str.length;i++){
+			end_expression+=str[i];
+			if(i<str.length-1){
+				end_expression+=fuhao.get(fuhao1);
+				fuhao1++;
+			}
+//			System.out.println("end_expression"+"   "+end_expression);
 		}
 		return end_expression;
 	}
 	
     /**
-     * ¶ÔÊäÈëµÄexpression£¬°´¼ÓºÅ²ğ·ÖÎª¶à¸ö¶àÏëÊ½£¬±£´æ²¢·µ»Ø
-     * ±£´æÎªArrayListÀàĞÍµÄÓÅÊÆÔÚÓÚÔÚ»¯¼òÊ±£¬»áÓĞ¼õÉÙ£¬±ãÓÚ´¦Àí¡£
+     * å¯¹è¾“å…¥çš„expressionï¼ŒæŒ‰åŠ å·æ‹†åˆ†ä¸ºå¤šä¸ªå¤šæƒ³å¼ï¼Œä¿å­˜å¹¶è¿”å›
+     * ä¿å­˜ä¸ºArrayListç±»å‹çš„ä¼˜åŠ¿åœ¨äºåœ¨åŒ–ç®€æ—¶ï¼Œä¼šæœ‰å‡å°‘ï¼Œä¾¿äºå¤„ç†ã€‚
      */
     public static ArrayList<String> getItems(String expression)
     {
@@ -306,26 +339,33 @@ public class experiment_1 {
     
     /**
     *
-    * @param factÎª¶àÏîÊ½ÖĞµÄÒò×Ó
-    * @return ÊÇÊı×Ö·µ»Ø1£¬·ñÔò·µ»Ø0¡£
+    * @param factä¸ºå¤šé¡¹å¼ä¸­çš„å› å­
+    * @return æ˜¯æ•°å­—è¿”å›1ï¼Œå¦åˆ™è¿”å›0ã€‚
     */
     public static boolean isInteger(String fact)
     {
-        Pattern pattern = Pattern.compile("[0-9]*");
+        Pattern pattern = Pattern.compile("[0-9]*|-[0-9]*");
         return pattern.matcher(fact).matches();
     }
     
     /**
      * 
-     * @param expression:±í´ïÊ½
-     * @param items:¶àÏîÊ½ 
-     * @return ·ûºÅÊı×é£¬½öº¬¡À1
+     * @param expression:è¡¨è¾¾å¼
+     * @param items:å¤šé¡¹å¼ 
+     * @return ç¬¦å·æ•°ç»„ï¼Œä»…å«Â±1
      */
     public static int[] getSign(String expression,ArrayList<String> items)
     {
     	int[] sign = new int[items.size()];
     	int j=0;
-    	for(int i = 0;i<expression.length();i++)
+    	if(expression.charAt(0) == '-'){//å¤„ç†ç¬¬ä¸€ä¸ªå¤šé¡¹å¼
+    		sign[j++] = -1;
+    	}
+    	else{
+    		sign[j++] = 1;
+    	}
+    
+    	for(int i = 1;i<expression.length();i++)//å¤„ç†åç»­å¤šé¡¹å¼
     	{
     		if(expression.charAt(i) == '+')
     		{
@@ -341,24 +381,38 @@ public class experiment_1 {
     }
     
     /**
-     * ÅĞ¶ÏÊÇ·ñÎªÍ¬ÀàÏî
-     * @param string1 Í¬ÀàÏî1
-     * @param string2 Í¬ÀàÏî2
-     * @return ÊÇ·ñÎªÍ¬ÀàÏî
-     * Ëã·¨Ë¼Ïë£º½«Á½¸ö¶àÏîÊ½·Ö±ğ°´*·Ö¿ªºó£¬½«±äÁ¿±£´æÔÚÁ½¸öÊı×éÀï£¬¶ÔÊı×é½øĞĞ×ÖµäÅÅĞòºó±È½Ï¼´¿É¡£ÏàÍ¬ÎªÍ¬ÀàÏî£¬²»Í¬Ôò·ÇÍ¬ÀàÏî¡£
+     * åˆ¤æ–­æ˜¯å¦ä¸ºåŒç±»é¡¹
+     * @param string1 åŒç±»é¡¹1
+     * @param string2 åŒç±»é¡¹2
+     * @return æ˜¯å¦ä¸ºåŒç±»é¡¹
+     * ç®—æ³•æ€æƒ³ï¼šå°†ä¸¤ä¸ªå¤šé¡¹å¼åˆ†åˆ«æŒ‰*åˆ†å¼€åï¼Œå°†å˜é‡ä¿å­˜åœ¨ä¸¤ä¸ªæ•°ç»„é‡Œï¼Œå¯¹æ•°ç»„è¿›è¡Œå­—å…¸æ’åºåæ¯”è¾ƒå³å¯ã€‚ç›¸åŒä¸ºåŒç±»é¡¹ï¼Œä¸åŒåˆ™éåŒç±»é¡¹ã€‚
      */
     public static boolean isSameItem(String string1, String string2)
     {
 		String[] factor1,factor2;
-		factor1=string1.split("//*|(/d+)");//°´*ºÅ»òÕßÊı×Ö²ğ·Ö
-		factor2=string2.split("//*|(/d+)");
-		if(factor1.length != factor2.length){
-			return false;
-		}
+		ArrayList<String> newFactors1 = new ArrayList<String>();
+		ArrayList<String> newFactors2 = new ArrayList<String>();
+		factor1=string1.split("\\*");//æŒ‰*å·æˆ–è€…æ•°å­—æ‹†åˆ†
+		factor2=string2.split("\\*");
+		
 		Arrays.sort(factor1);
 		Arrays.sort(factor2);
+		for (int i = 0; i < factor1.length; i++) {
+			if(!isInteger(factor1[i])){
+				newFactors1.add(factor1[i]);
+			}
+		}
 		for (int i = 0; i < factor2.length; i++) {
-			if(factor1[i]!=factor2[i]){
+			if(!isInteger(factor2[i])){
+				newFactors2.add(factor2[i]);
+			}
+		}
+		
+		if(newFactors1.size() != newFactors2.size()){
+			return false;
+		}
+		for (int i = 0; i < newFactors2.size(); i++) {
+			if(!newFactors1.get(i).equals(newFactors2.get(i))){
 				return false;
 			}
 		}
@@ -366,57 +420,77 @@ public class experiment_1 {
 	}
     
     /**
-     * * ¶ÔÊäÈëµÄexpression½øĞĞ¼ò»¯£¬Êä³ö¼ò»¯½á¹û
-     * itemsÎªÒÑ·Ö¿ªµÄ¶àÏîÊ½£¬signArrÎª·ûºÅÊı×é¡£
-     * ¼ò»¯°üÀ¨Ã¿¸ö Í¬ÀàÏîÏµÊıÏà³Ë£¬Í¬ÀàÏîºÏ²¢¡£
+     * * å¯¹è¾“å…¥çš„expressionè¿›è¡Œç®€åŒ–ï¼Œè¾“å‡ºç®€åŒ–ç»“æœ
+     * itemsä¸ºå·²åˆ†å¼€çš„å¤šé¡¹å¼ï¼ŒsignArrä¸ºç¬¦å·æ•°ç»„ã€‚
+     * ç®€åŒ–åŒ…æ‹¬æ¯ä¸ª åŒç±»é¡¹ç³»æ•°ç›¸ä¹˜ï¼ŒåŒç±»é¡¹åˆå¹¶ã€‚
      * @param expression
      * @param items
      * @param signArr
-     * @return »¯¼òºóµÄ±í´ïÊ½
+     * @return åŒ–ç®€åçš„è¡¨è¾¾å¼
      */
     public static String makeSimple(String expression,ArrayList<String> items ,int[] signArr)
     {
-        String[] factors = null;//±£´æ¶àÏîÊ½µÄÒò×Ó
-        String newExpression = null;//±£´æ×îÖÕ»¯¼ò½á¹û
-        int[] newXishu  = new int[items.size()];//»¯¼òºóµÄÏµÊıÊı×é
-        ArrayList<String> newItems = items;//»¯¼òºóµÄ¶àÏîÊ½
-        int tmpXishu = 0;//ÁÙÊ±ÏµÊı
-        String tmpItem = null;//ÁÙÊ±¶àÏîÊ½
+        String[] factors = null;//ä¿å­˜å¤šé¡¹å¼çš„å› å­
+        String newExpression = null;//ä¿å­˜æœ€ç»ˆåŒ–ç®€ç»“æœ
+        int[] newXishu  = new int[items.size()];//åŒ–ç®€åçš„ç³»æ•°æ•°ç»„
+        ArrayList<String> newItems = items;//åŒ–ç®€åçš„å¤šé¡¹å¼
+        int tmpXishu = 0;//ä¸´æ—¶ç³»æ•°
+        String tmpItem = null;//ä¸´æ—¶å¤šé¡¹å¼
         
         for (int i = 0; i < newXishu.length; i++)
         {
             newXishu[i]=1;
         }
-        for (int i=0;i<newItems.size();i++)//¶ÔÃ»¸ö¶àÏîÊ½ÄÚ²¿µÄÊı×ÖÏà³Ë»¯¼ò
+        for (int i=0;i<newItems.size();i++)//å¯¹æ¯ä¸ªå¤šé¡¹å¼å†…éƒ¨çš„æ•°å­—ç›¸ä¹˜åŒ–ç®€
         {
-            factors = newItems.get(i).split("//*");//ÓÃ*·ÖÀë³ö¶àÏîÊ½µÄÃ¿¸öÒò×Ó
-            for (int j = 0; j < factors.length; j++)//¼ÆËãÏµÊı
+            factors = newItems.get(i).split("\\*");//ç”¨*åˆ†ç¦»å‡ºå¤šé¡¹å¼çš„æ¯ä¸ªå› å­
+            for (int j = 0; j < factors.length; j++)//è®¡ç®—ç³»æ•°
             {
-                if (isInteger(factors[j]))//Èç¹ûÊÇÊı×Ö
+                if (isInteger(factors[j]))//å¦‚æœæ˜¯æ•°å­—
                 {
                     newXishu[i] *= Integer.parseInt(factors[j]);
                 }
             }
+            
+            tmpItem = Integer.toString(newXishu[i]);
+            for (int k = 0; k < factors.length; k++)//é‡æ–°å¯¹å¤šé¡¹å¼ç»„åˆ
+            {
+                if (!isInteger(factors[k]))//å¦‚æœä¸æ˜¯æ•°å­—
+                {
+                    tmpItem+=("*"+factors[k]);
+                }
+            }
+            newItems.set(i, tmpItem);
         }
-        for (int i=0;i<newItems.size();i++)//ºÏ²¢Í¬ÀàÏî
+        for (int i=0;i<newItems.size();i++)//åˆå¹¶åŒç±»é¡¹
         {
         	for(int j=i+1;j<newItems.size();j++)
         	{
-        		if(isSameItem(newItems.get(i),newItems.get(j)))//Èç¹ûÊÇÍ¬ÀàÏî
+        		if(isSameItem(newItems.get(i),newItems.get(j)))//å¦‚æœæ˜¯åŒç±»é¡¹
         		{
-        			tmpXishu=signArr[i]*newXishu[i]+signArr[j]*newXishu[j];//¼ÆËãĞÂµÄÏµÊı
+        			tmpXishu=signArr[i]*newXishu[i]+signArr[j]*newXishu[j];//è®¡ç®—æ–°çš„ç³»æ•°
         			tmpItem=Integer.toString(tmpXishu);
         			
-        			factors = newItems.get(i).split("//*");//ÓÃ*·ÖÀë³ö¶àÏîÊ½µÄÃ¿¸öÒò×Ó
-                    for (int k = 0; k < factors.length; k++)//ÖØĞÂ¶Ô¶àÏîÊ½×éºÏ
+        			factors = newItems.get(i).split("\\*");//ç”¨*åˆ†ç¦»å‡ºå¤šé¡¹å¼çš„æ¯ä¸ªå› å­
+                    for (int k = 0; k < factors.length; k++)//é‡æ–°å¯¹å¤šé¡¹å¼ç»„åˆ
                     {
-                        if (!isInteger(factors[j]))//Èç¹û²»ÊÇÊı×Ö
+                        if (!isInteger(factors[k]))//å¦‚æœä¸æ˜¯æ•°å­—
                         {
                             tmpItem+=("*"+factors[k]);
                         }
                     }
-                    newItems.set(i, tmpItem);//¸üĞÂiÎ»ÖÃÏî
-                    newItems.remove(j);//É¾³ıjÎ»ÖÃÏî
+                    newItems.set(i, tmpItem);//æ›´æ–°iä½ç½®é¡¹
+                    newItems.remove(j);//åˆ é™¤jä½ç½®é¡¹
+                    
+                    newXishu[i]=tmpXishu;//æ›´æ–°iä½ç½®ç³»æ•°
+                    
+                    for(int l = j; l<newItems.size();l++){
+                    	signArr[l]=signArr[l+1];//æ›´æ–°ç¬¦å·æ•°ç»„ï¼Œjä½ç½®å‰ç§»
+                    	newXishu[l]=newXishu[l+1];//æ›´æ–°ç³»æ•°æ•°ç»„ï¼Œjä½ç½®å‰ç§»
+                    }                  
+                    
+                    j-=1;//åˆ é™¤åï¼Œæ–°çš„é¡¹å äº†åŸæ¥ä½ç½®ï¼Œéœ€è¦å‡ä¸€ï¼Œå¦åˆ™åˆ¤æ–­åŒç±»é¡¹ä¼šéœ²é¡¹ã€‚
+                    
         		}
         	}
         }
@@ -425,13 +499,11 @@ public class experiment_1 {
         }
         else{
         	newExpression=newItems.get(0);
-	        for (int i = 1; i < newItems.size(); i++) {//ºÏ³É×îÖÕ»¯¼ò½á¹û
-	        	newExpression += "*" + newItems.get(i);
+	        for (int i = 1; i < newItems.size(); i++) {//åˆæˆæœ€ç»ˆåŒ–ç®€ç»“æœ
+	        	newExpression += "+" + newItems.get(i);
 			}
         }
         return newExpression;
     }
 	
 }
-
-
