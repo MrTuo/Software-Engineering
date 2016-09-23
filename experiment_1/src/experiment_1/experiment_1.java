@@ -7,76 +7,76 @@ import java.util.regex.Pattern;
 
 public class experiment_1 {
 
-	//letter numbser新表达式需要初始化
+	//letter numbser鏂拌〃杈惧紡闇?瑕佸垵濮嬪寲
 	public static void  main (String[] args){
 		//variable
 		@SuppressWarnings("resource")
 		Scanner in=new Scanner(System.in);
-		String expression=null;//输入的表达式或者是！命令行
-		String end_expression=null;//这里存放的是表达式，当expression输入的是正确的表达式时，将end_expression更新
-		String[] xiang;//这里存放的是将表达式分解为项的String数组
-		boolean judge=false;//判断表达式是否正确
-		int choice=0;//选择
-		ArrayList<String>  number = new ArrayList<String> ();//记录赋值函数的值
-		ArrayList<String>  letter = new ArrayList<String> ();//赋值函数的类型
-		ArrayList<String>  fuhao = new ArrayList<String> ();//存放表达式中的+号或者是-号的位置顺序
-		char VarDerivative = 0;//保证求导变量的类型
+		String expression=null;//杈撳叆鐨勮〃杈惧紡鎴栬?呮槸锛佸懡浠よ
+		String end_expression=null;//杩欓噷瀛樻斁鐨勬槸琛ㄨ揪寮忥紝褰揺xpression杈撳叆鐨勬槸姝ｇ‘鐨勮〃杈惧紡鏃讹紝灏唀nd_expression鏇存柊
+		String[] xiang;//杩欓噷瀛樻斁鐨勬槸灏嗚〃杈惧紡鍒嗚В涓洪」鐨凷tring鏁扮粍
+		boolean judge=false;//鍒ゆ柇琛ㄨ揪寮忔槸鍚︽纭?
+		int choice=0;//閫夋嫨
+		ArrayList<String>  number = new ArrayList<String> ();//璁板綍璧嬪?煎嚱鏁扮殑鍊?
+		ArrayList<String>  letter = new ArrayList<String> ();//璧嬪?煎嚱鏁扮殑绫诲瀷
+		ArrayList<String>  fuhao = new ArrayList<String> ();//瀛樻斁琛ㄨ揪寮忎腑鐨?+鍙锋垨鑰呮槸-鍙风殑浣嶇疆椤哄簭
+		char VarDerivative = 0;//淇濊瘉姹傚鍙橀噺鐨勭被鍨?
 		int j=0;
 		int x=0;
 		int y=0;
 
 		while(true){
 			choice=0;
-			expression=in.nextLine();//输入
-			fuhao=myfuhao(expression);//获得输入的符号，不管是不是正确的表达式或者是赋值求导指令
-			//expression=change(expression,fuhao);//将表达式转变为标准的表达式（无论表达式是否正确或者是输入的赋值求导指令
+			expression=in.nextLine();//杈撳叆
+			fuhao=myfuhao(expression);//鑾峰緱杈撳叆鐨勭鍙凤紝涓嶇鏄笉鏄纭殑琛ㄨ揪寮忔垨鑰呮槸璧嬪?兼眰瀵兼寚浠?
+			expression=change(expression,fuhao);//灏嗚〃杈惧紡杞彉涓烘爣鍑嗙殑琛ㄨ揪寮忥紙鏃犺琛ㄨ揪寮忔槸鍚︽纭垨鑰呮槸杈撳叆鐨勮祴鍊兼眰瀵兼寚浠?
 
-			judge=expression(expression, expression.length());//判断表达式是否正确
-			if (expression.length()>=9 && expression.substring(0, 9).equals("!simplify")){//如果是赋值选择2
+			judge=expression(expression, expression.length());//鍒ゆ柇琛ㄨ揪寮忔槸鍚︽纭?
+			if (expression.length()>=9 && expression.substring(0, 9).equals("!simplify")){//濡傛灉鏄祴鍊奸?夋嫨2
 				choice=2;
 			}
-			else if(expression.length()>=4 && expression.substring(0, 4).equals("!d/d")){//如果是求导选择3
+			else if(expression.length()>=4 && expression.substring(0, 4).equals("!d/d")){//濡傛灉鏄眰瀵奸?夋嫨3
 				choice=3;
 			}
 			else{
-				choice=1;//其他情况选择1
+				choice=1;//鍏朵粬鎯呭喌閫夋嫨1
 			}
 			switch(choice)
 			{
 			case 1:
-				if (judge){//如果表达式正确，则输出表达式，并更新end_expression
-					System.out.println(expression);
+				if (judge){//濡傛灉琛ㄨ揪寮忔纭紝鍒欒緭鍑鸿〃杈惧紡锛屽苟鏇存柊end_expression
+					System.out.println("鏀瑰彉鍚庣殑琛ㄨ揪寮?:"+expression);
 					end_expression=expression;
 				}
-				else{//不正确则输出错误信息
+				else{//涓嶆纭垯杈撳嚭閿欒淇℃伅
 					System.out.println("The expression is wrong!Stupid!");
 					//System.out.println(end_expression);
 				}
 				break;
 			case 2:
 				if (end_expression==null){
-					System.out.println("Error There is no expression!");//在没有表达式的情况下无法赋值
+					System.out.println("Error There is no expression!");//鍦ㄦ病鏈夎〃杈惧紡鐨勬儏鍐典笅鏃犳硶璧嬪??
 				}
 				else{
-					for (int i=expression.length()-1;i>=0;i--){//获得要赋值的变量
+					for (int i=expression.length()-1;i>=0;i--){//鑾峰緱瑕佽祴鍊肩殑鍙橀噺
 						if(expression.charAt(i)=='='){
 							j=i;
-							number.add(expression.substring(i+1,j+2));//获得要赋值变量的值
+							number.add(expression.substring(i+1,j+2));//鑾峰緱瑕佽祴鍊煎彉閲忕殑鍊?
 						}
 						else if(expression.charAt(i)==' '){
-							letter.add(expression.substring(i+1, j));//获得要赋值变量的名称
+							letter.add(expression.substring(i+1, j));//鑾峰緱瑕佽祴鍊煎彉閲忕殑鍚嶇О
 						}
 					}
-					simplify(end_expression,letter,number);//计算赋值后的结果，在函数中输出
+					simplify(end_expression,letter,number);//璁＄畻璧嬪?煎悗鐨勭粨鏋滐紝鍦ㄥ嚱鏁颁腑杈撳嚭
 				}
 				break;
 			case 3:
 				if(end_expression==null){
-					System.out.println("Error There is no expression!");//在没有表达式的情况下无法求导
+					System.out.println("Error There is no expression!");//鍦ㄦ病鏈夎〃杈惧紡鐨勬儏鍐典笅鏃犳硶姹傚
 				}
-				else{//有了表达式
-					//首先要将求导的变量求出来 变量只能是在 !d/d()括号里面的值 "()"是不能存在的 且变量只能有字母组成
-					VarDerivative=expression.charAt(4);//获得要求导的变量 这里变量只能是单个字符
+				else{//鏈変簡琛ㄨ揪寮?
+					//棣栧厛瑕佸皢姹傚鐨勫彉閲忔眰鍑烘潵 鍙橀噺鍙兘鏄湪 !d/d()鎷彿閲岄潰鐨勫?? "()"鏄笉鑳藉瓨鍦ㄧ殑 涓斿彉閲忓彧鑳芥湁瀛楁瘝缁勬垚
+					VarDerivative=expression.charAt(4);//鑾峰緱瑕佹眰瀵肩殑鍙橀噺 杩欓噷鍙橀噺鍙兘鏄崟涓瓧绗?
 					j=0;
 					/*System.out.println(VarDerivative);
 					for (int i=0;i<expression.length();i++){
@@ -95,7 +95,7 @@ public class experiment_1 {
 					xiang=splitby_jia(end_expression);
 					//System.out.println(1);
 					fuhao=myfuhao(end_expression);
-					derivative(xiang,VarDerivative,end_expression,fuhao);//输出求导后的结果，在函数中输出
+					derivative(xiang,VarDerivative,end_expression,fuhao);//杈撳嚭姹傚鍚庣殑缁撴灉锛屽湪鍑芥暟涓緭鍑?
 				}
 				break;
 			default:
@@ -105,7 +105,7 @@ public class experiment_1 {
 			 
 		}
 	}
-	public static boolean expression(String str,int len){//输入表达式
+	public static boolean expression(String str,int len){//杈撳叆琛ㄨ揪寮?
 		char a=0,b=0,c=0;//b is behind a,c is in front of a
 		int x=0;//judge the number is the first one or not
 		for (int i=0;i<len;i++){;
@@ -148,7 +148,7 @@ public class experiment_1 {
 		} 
 		return true;
 	}
-	public static void simplify(String expression,ArrayList<String> letter,ArrayList<String> number){//初始化赋值
+	public static void simplify(String expression,ArrayList<String> letter,ArrayList<String> number){//鍒濆鍖栬祴鍊?
 		String end=null;
 		end =expression;
 			/*for (int i=0;i<letter.size();i++){
@@ -160,18 +160,18 @@ public class experiment_1 {
 		}
 		System.out.println("Before make simple");
 		System.out.println(end);
-		//将化简结果合并简化 by妥
-		ArrayList<String> newItem = getItems(end);//获取多项式
-		int[] newSign = getSign(end, newItem);//获取多项式符号数组
+		//灏嗗寲绠?缁撴灉鍚堝苟绠?鍖? by濡?
+		ArrayList<String> newItem = getItems(end);//鑾峰彇澶氶」寮?
+		int[] newSign = getSign(end, newItem);//鑾峰彇澶氶」寮忕鍙锋暟缁?
 		String newExpression = makeSimple(end, newItem, newSign);
 		System.out.println("After make simple");
 		System.out.println(newExpression);
 		//return end;
 	}
 	@SuppressWarnings("null")
-	public static String derivative(String[] itemCount,char var,String expression,ArrayList<String> fuhao){//求导初始化
-		int varNum[];//变量的个数
-		int xishu[];//项的系数
+	public static String derivative(String[] itemCount,char var,String expression,ArrayList<String> fuhao){//姹傚鍒濆鍖?
+		int varNum[];//鍙橀噺鐨勪釜鏁?
+		int xishu[];//椤圭殑绯绘暟
 		ArrayList<String>  newitemCount = new ArrayList<String> ();
 		ArrayList<String>  newfuhao = new ArrayList<String> ();
 		String end="";
@@ -184,14 +184,14 @@ public class experiment_1 {
 		}
 		else{
 			for (int i=0;i<itemCount.length;i++){
-				for (int j=0;j<itemCount[i].length();j++){//计算变量的个数
+				for (int j=0;j<itemCount[i].length();j++){//璁＄畻鍙橀噺鐨勪釜鏁?
 					if(var==itemCount[i].charAt(j)){
 						varNum[i]++;
 					}
 				}
 			}
 
-			for (int i=0;i<itemCount.length;i++){//合成求导后的项
+			for (int i=0;i<itemCount.length;i++){//鍚堟垚姹傚鍚庣殑椤?
 				if(varNum[i]!=0){
 					if(i<itemCount.length-1){
 						//System.out.println(fuhao);
@@ -203,7 +203,7 @@ public class experiment_1 {
 					//System.out.println(newitemCount);
 				}
 			}
-			for (int i=0;i<newitemCount.size();i++){//将合成的项连起来
+			for (int i=0;i<newitemCount.size();i++){//灏嗗悎鎴愮殑椤硅繛璧锋潵
 				if(i==0){
 					end+=newitemCount.get(i);
 				}
@@ -213,20 +213,20 @@ public class experiment_1 {
 			}
 		}
 		
-		//将化简结果合并简化 by妥
+		//灏嗗寲绠?缁撴灉鍚堝苟绠?鍖? by濡?
 		System.out.println("Before make simple");
 		System.out.println(end);
-		ArrayList<String> newItem = getItems(end);//获取多项式
-		int[] newSign = getSign(end, newItem);//获取多项式符号数组
+		ArrayList<String> newItem = getItems(end);//鑾峰彇澶氶」寮?
+		int[] newSign = getSign(end, newItem);//鑾峰彇澶氶」寮忕鍙锋暟缁?
 		String newExpression = makeSimple(end, newItem, newSign);
 		System.out.println("After make simple");
 		System.out.println(newExpression);
 		return newExpression;
 	}
-	public static String[] splitby_jia(String str){//按加法分割
+	public static String[] splitby_jia(String str){//鎸夊姞娉曞垎鍓?
 		return str.split("\\+|\\-");
 	}
-	public static String[] splitby_cheng(String str){//按乘法分割
+	public static String[] splitby_cheng(String str){//鎸変箻娉曞垎鍓?
 		return str.split("\\*");
 	}
 	public static ArrayList<String> myfuhao(String end_expression){
@@ -241,17 +241,16 @@ public class experiment_1 {
 		}
 		return fuhao;
 	}
-	public static String change(String expression,ArrayList<String> fuhao){//将输入的表达式进行修改
+	public static String change(String expression,ArrayList<String> fuhao){//灏嗚緭鍏ョ殑琛ㄨ揪寮忚繘琛屼慨鏀?
 		String change_expression=null;
 		String end_expression="";
 		String[] str;
 		String[] xiang;
-		String newstr = null;
 		String newxiang = null;
 		int xishu=0;
-		int fuhao1=0;//标记到第几个符号了
-		change_expression=expression.replace("\t", "");//将tab删掉
-		change_expression=change_expression.replace(" ", "");//将空格删掉
+		int fuhao1=0;//鏍囪鍒扮鍑犱釜绗﹀彿浜?
+		change_expression=expression.replace("\t", "");//灏唗ab鍒犳帀
+		change_expression=change_expression.replace(" ", "");//灏嗙┖鏍煎垹鎺?
 
 		//System.out.println(str+" ");
 		for (int i=0;i<change_expression.length();i++){
@@ -267,17 +266,16 @@ public class experiment_1 {
 		}
 		end_expression=change_expression;
 		str=end_expression.split("\\+|\\-");
-		System.out.println(end_expression);
-		for (int i=0;i<str.length;i++){//依次访问每个项
-			newstr=str[i];
+		System.out.println("杈撳叆鐨勮〃杈惧紡:"+end_expression);
+		for (int i=0;i<str.length;i++){//渚濇璁块棶姣忎釜椤?
 			xiang=str[i].split("\\*");
-			for(int j=0;j<xiang.length;j++){//对每个项访问
+			for(int j=0;j<xiang.length;j++){//瀵规瘡涓」璁块棶
 				newxiang=xiang[j];
-				System.out.println("newxiang1"+"   "+newxiang);
+//				System.out.println("newxiang1"+"   "+newxiang);
 				for(int k=0;k<xiang[j].length();k++){
 					if(xiang[j].charAt(k)=='^'){
-						for (int l=k+1;l<xiang[j].length();l++){//计算^后面的系数是多少
-							if(xiang[j].charAt(l)<'0'||xiang[j].charAt(l)>'9'){//出现错误，直接返回，在judge中会判断为错误表达式
+						for (int l=k+1;l<xiang[j].length();l++){//璁＄畻^鍚庨潰鐨勭郴鏁版槸澶氬皯
+							if(xiang[j].charAt(l)<'0'||xiang[j].charAt(l)>'9'){//鍑虹幇閿欒锛岀洿鎺ヨ繑鍥烇紝鍦╦udge涓細鍒ゆ柇涓洪敊璇〃杈惧紡
 								return end_expression;
 							}
 							else{
@@ -285,41 +283,49 @@ public class experiment_1 {
 							}
 						}
 						newxiang=newxiang.substring(0, newxiang.indexOf("^"));
-						for (int n=0;n<k;n++){
-							newxiang=xiang[n]+"*"+newxiang;
-						}
-						System.out.println("newxiang3"+"   "+newxiang);
-						for (int m=0;m<xishu;m++){
+//						System.out.println("newxiang2"+"   "+newxiang);
+//						System.out.println("newxiang3"+"   "+newxiang);
+						for (int m=0;m<xishu-1;m++){
 							newxiang+="*"+xiang[j].substring(0, xiang[j].indexOf("^"));
 						}
-						System.out.println("newxiang3"+"   "+newxiang);
-						for (int n=k+1;n<xiang.length;n++){
-							newxiang+="*"+xiang[n];
-						}
 						xiang[j]=newxiang;
-						System.out.println("newxiang3"+"   "+newxiang);
+//						System.out.println("newxiang3"+"   "+newxiang);
 					}
 				}
 			}
+//			System.out.println("1=============");
+//			for (int n=0;n<xiang.length;n++){
+//				System.out.println(xiang[n]);
+//			}
+//			System.out.println("=============");
+			newxiang=xiang[0];
+			for (int n=1;n<xiang.length;n++){
+				newxiang+="*"+xiang[n];
+			}
 			str[i]=newxiang;
-			System.out.println(str[i]);
+//			System.out.println("*****"+str[i]);
 		}
-		System.out.println("fuhao"+"   "+fuhao);
-		System.out.println("str"+"   "+str.length);
-		//每个项都处理完了，该合并项了
+//		System.out.println("fuhao"+"   "+fuhao);
+//		System.out.println("str"+"   "+str.length);
+		//姣忎釜椤归兘澶勭悊瀹屼簡锛岃鍚堝苟椤逛簡
+		end_expression="";
+//		for (int i=0;i<str.length;i++){
+//			System.out.println("str"+"   "+str[i]);
+//		}
 		for (int i=0;i<str.length;i++){
 			end_expression+=str[i];
-			if(i<expression.length()-1){
-				end_expression+=fuhao.get(fuhao1++);
+			if(i<str.length-1){
+				end_expression+=fuhao.get(fuhao1);
+				fuhao1++;
 			}
-			System.out.println("end_expression"+"   "+end_expression);
+//			System.out.println("end_expression"+"   "+end_expression);
 		}
 		return end_expression;
 	}
 	
     /**
-     * 对输入的expression，按加号拆分为多个多想式，保存并返回
-     * 保存为ArrayList类型的优势在于在化简时，会有减少，便于处理。
+     * 瀵硅緭鍏ョ殑expression锛屾寜鍔犲彿鎷嗗垎涓哄涓鎯冲紡锛屼繚瀛樺苟杩斿洖
+     * 淇濆瓨涓篈rrayList绫诲瀷鐨勪紭鍔垮湪浜庡湪鍖栫畝鏃讹紝浼氭湁鍑忓皯锛屼究浜庡鐞嗐??
      */
     public static ArrayList<String> getItems(String expression)
     {
@@ -333,8 +339,8 @@ public class experiment_1 {
     
     /**
     *
-    * @param fact为多项式中的因子
-    * @return 是数字返回1，否则返回0。
+    * @param fact涓哄椤瑰紡涓殑鍥犲瓙
+    * @return 鏄暟瀛楄繑鍥?1锛屽惁鍒欒繑鍥?0銆?
     */
     public static boolean isInteger(String fact)
     {
@@ -344,22 +350,22 @@ public class experiment_1 {
     
     /**
      * 
-     * @param expression:表达式
-     * @param items:多项式 
-     * @return 符号数组，仅含±1
+     * @param expression:琛ㄨ揪寮?
+     * @param items:澶氶」寮? 
+     * @return 绗﹀彿鏁扮粍锛屼粎鍚?1
      */
     public static int[] getSign(String expression,ArrayList<String> items)
     {
     	int[] sign = new int[items.size()];
     	int j=0;
-    	if(expression.charAt(0) == '-'){//处理第一个多项式
+    	if(expression.charAt(0) == '-'){//澶勭悊绗竴涓椤瑰紡
     		sign[j++] = -1;
     	}
     	else{
     		sign[j++] = 1;
     	}
     
-    	for(int i = 1;i<expression.length();i++)//处理后续多项式
+    	for(int i = 1;i<expression.length();i++)//澶勭悊鍚庣画澶氶」寮?
     	{
     		if(expression.charAt(i) == '+')
     		{
@@ -375,18 +381,18 @@ public class experiment_1 {
     }
     
     /**
-     * 判断是否为同类项
-     * @param string1 同类项1
-     * @param string2 同类项2
-     * @return 是否为同类项
-     * 算法思想：将两个多项式分别按*分开后，将变量保存在两个数组里，对数组进行字典排序后比较即可。相同为同类项，不同则非同类项。
+     * 鍒ゆ柇鏄惁涓哄悓绫婚」
+     * @param string1 鍚岀被椤?1
+     * @param string2 鍚岀被椤?2
+     * @return 鏄惁涓哄悓绫婚」
+     * 绠楁硶鎬濇兂锛氬皢涓や釜澶氶」寮忓垎鍒寜*鍒嗗紑鍚庯紝灏嗗彉閲忎繚瀛樺湪涓や釜鏁扮粍閲岋紝瀵规暟缁勮繘琛屽瓧鍏告帓搴忓悗姣旇緝鍗冲彲銆傜浉鍚屼负鍚岀被椤癸紝涓嶅悓鍒欓潪鍚岀被椤广??
      */
     public static boolean isSameItem(String string1, String string2)
     {
 		String[] factor1,factor2;
 		ArrayList<String> newFactors1 = new ArrayList<String>();
 		ArrayList<String> newFactors2 = new ArrayList<String>();
-		factor1=string1.split("\\*");//按*号或者数字拆分
+		factor1=string1.split("\\*");//鎸?*鍙锋垨鑰呮暟瀛楁媶鍒?
 		factor2=string2.split("\\*");
 		
 		Arrays.sort(factor1);
@@ -414,76 +420,76 @@ public class experiment_1 {
 	}
     
     /**
-     * * 对输入的expression进行简化，输出简化结果
-     * items为已分开的多项式，signArr为符号数组。
-     * 简化包括每个 同类项系数相乘，同类项合并。
+     * * 瀵硅緭鍏ョ殑expression杩涜绠?鍖栵紝杈撳嚭绠?鍖栫粨鏋?
+     * items涓哄凡鍒嗗紑鐨勫椤瑰紡锛宻ignArr涓虹鍙锋暟缁勩??
+     * 绠?鍖栧寘鎷瘡涓? 鍚岀被椤圭郴鏁扮浉涔橈紝鍚岀被椤瑰悎骞躲??
      * @param expression
      * @param items
      * @param signArr
-     * @return 化简后的表达式
+     * @return 鍖栫畝鍚庣殑琛ㄨ揪寮?
      */
     public static String makeSimple(String expression,ArrayList<String> items ,int[] signArr)
     {
-        String[] factors = null;//保存多项式的因子
-        String newExpression = null;//保存最终化简结果
-        int[] newXishu  = new int[items.size()];//化简后的系数数组
-        ArrayList<String> newItems = items;//化简后的多项式
-        int tmpXishu = 0;//临时系数
-        String tmpItem = null;//临时多项式
+        String[] factors = null;//淇濆瓨澶氶」寮忕殑鍥犲瓙
+        String newExpression = null;//淇濆瓨鏈?缁堝寲绠?缁撴灉
+        int[] newXishu  = new int[items.size()];//鍖栫畝鍚庣殑绯绘暟鏁扮粍
+        ArrayList<String> newItems = items;//鍖栫畝鍚庣殑澶氶」寮?
+        int tmpXishu = 0;//涓存椂绯绘暟
+        String tmpItem = null;//涓存椂澶氶」寮?
         
         for (int i = 0; i < newXishu.length; i++)
         {
             newXishu[i]=1;
         }
-        for (int i=0;i<newItems.size();i++)//对每个多项式内部的数字相乘化简
+        for (int i=0;i<newItems.size();i++)//瀵规瘡涓椤瑰紡鍐呴儴鐨勬暟瀛楃浉涔樺寲绠?
         {
-            factors = newItems.get(i).split("\\*");//用*分离出多项式的每个因子
-            for (int j = 0; j < factors.length; j++)//计算系数
+            factors = newItems.get(i).split("\\*");//鐢?*鍒嗙鍑哄椤瑰紡鐨勬瘡涓洜瀛?
+            for (int j = 0; j < factors.length; j++)//璁＄畻绯绘暟
             {
-                if (isInteger(factors[j]))//如果是数字
+                if (isInteger(factors[j]))//濡傛灉鏄暟瀛?
                 {
                     newXishu[i] *= Integer.parseInt(factors[j]);
                 }
             }
             
             tmpItem = Integer.toString(newXishu[i]);
-            for (int k = 0; k < factors.length; k++)//重新对多项式组合
+            for (int k = 0; k < factors.length; k++)//閲嶆柊瀵瑰椤瑰紡缁勫悎
             {
-                if (!isInteger(factors[k]))//如果不是数字
+                if (!isInteger(factors[k]))//濡傛灉涓嶆槸鏁板瓧
                 {
                     tmpItem+=("*"+factors[k]);
                 }
             }
             newItems.set(i, tmpItem);
         }
-        for (int i=0;i<newItems.size();i++)//合并同类项
+        for (int i=0;i<newItems.size();i++)//鍚堝苟鍚岀被椤?
         {
         	for(int j=i+1;j<newItems.size();j++)
         	{
-        		if(isSameItem(newItems.get(i),newItems.get(j)))//如果是同类项
+        		if(isSameItem(newItems.get(i),newItems.get(j)))//濡傛灉鏄悓绫婚」
         		{
-        			tmpXishu=signArr[i]*newXishu[i]+signArr[j]*newXishu[j];//计算新的系数
+        			tmpXishu=signArr[i]*newXishu[i]+signArr[j]*newXishu[j];//璁＄畻鏂扮殑绯绘暟
         			tmpItem=Integer.toString(tmpXishu);
         			
-        			factors = newItems.get(i).split("\\*");//用*分离出多项式的每个因子
-                    for (int k = 0; k < factors.length; k++)//重新对多项式组合
+        			factors = newItems.get(i).split("\\*");//鐢?*鍒嗙鍑哄椤瑰紡鐨勬瘡涓洜瀛?
+                    for (int k = 0; k < factors.length; k++)//閲嶆柊瀵瑰椤瑰紡缁勫悎
                     {
-                        if (!isInteger(factors[k]))//如果不是数字
+                        if (!isInteger(factors[k]))//濡傛灉涓嶆槸鏁板瓧
                         {
                             tmpItem+=("*"+factors[k]);
                         }
                     }
-                    newItems.set(i, tmpItem);//更新i位置项
-                    newItems.remove(j);//删除j位置项
+                    newItems.set(i, tmpItem);//鏇存柊i浣嶇疆椤?
+                    newItems.remove(j);//鍒犻櫎j浣嶇疆椤?
                     
-                    newXishu[i]=tmpXishu;//更新i位置系数
+                    newXishu[i]=tmpXishu;//鏇存柊i浣嶇疆绯绘暟
                     
                     for(int l = j; l<newItems.size();l++){
-                    	signArr[l]=signArr[l+1];//更新符号数组，j位置前移
-                    	newXishu[l]=newXishu[l+1];//更新系数数组，j位置前移
+                    	signArr[l]=signArr[l+1];//鏇存柊绗﹀彿鏁扮粍锛宩浣嶇疆鍓嶇Щ
+                    	newXishu[l]=newXishu[l+1];//鏇存柊绯绘暟鏁扮粍锛宩浣嶇疆鍓嶇Щ
                     }                  
                     
-                    j-=1;//删除后，新的项占了原来位置，需要减一，否则判断同类项会露项。
+                    j-=1;//鍒犻櫎鍚庯紝鏂扮殑椤瑰崰浜嗗師鏉ヤ綅缃紝闇?瑕佸噺涓?锛屽惁鍒欏垽鏂悓绫婚」浼氶湶椤广??
                     
         		}
         	}
@@ -493,7 +499,7 @@ public class experiment_1 {
         }
         else{
         	newExpression=newItems.get(0);
-	        for (int i = 1; i < newItems.size(); i++) {//合成最终化简结果
+	        for (int i = 1; i < newItems.size(); i++) {//鍚堟垚鏈?缁堝寲绠?缁撴灉
 	        	newExpression += "+" + newItems.get(i);
 			}
         }
@@ -501,5 +507,3 @@ public class experiment_1 {
     }
 	
 }
-
-
